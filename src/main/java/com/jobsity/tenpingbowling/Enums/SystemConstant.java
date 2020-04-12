@@ -1,18 +1,17 @@
 package com.jobsity.tenpingbowling.Enums;
 
-/*
- THIS SHOULD BE SOME KIND OF SERVICES TO VALIDATES THIS, REQUEST AND RESPONSE PATTERN
- */
-public enum Validations {
+public enum SystemConstant {
 
     PLAYER_INDEX(0),
     SCORE_INDEX(1),
     VALID_SCORE_LINE_LENGTH(2),
-    VALID_KEY_MAP_SIZE(2);
+    VALID_KEY_MAP_SIZE(2),
+    LAST_ROUND_ID(10)
+    ;
 
     private final int value;
 
-    Validations(int value) {
+    SystemConstant(int value) {
         this.value = value;
     }
 

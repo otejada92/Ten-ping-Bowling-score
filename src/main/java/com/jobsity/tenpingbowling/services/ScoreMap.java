@@ -1,6 +1,7 @@
 package com.jobsity.tenpingbowling.services;
 
-import com.jobsity.tenpingbowling.Enums.Validations;
+import com.jobsity.tenpingbowling.Component.BowlingScoreFile;
+import com.jobsity.tenpingbowling.Enums.SystemConstant;
 import com.jobsity.tenpingbowling.interfaces.FrameScoreServices;
 import com.jobsity.tenpingbowling.interfaces.ScoreMapServices;
 import com.jobsity.tenpingbowling.models.Frame;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -21,16 +21,19 @@ import java.util.stream.Collectors;
 public class ScoreMap implements ScoreMapServices {
 
     @Autowired
-    private FrameScoreServices FrameScoreServicesImp;
+    private FrameScoreServices frameScoreServices;
+
+    @Autowired
+    private BowlingScoreFile bowlingScoreFile;
 
     private Map<Player, ArrayList<Frame>> scoreMap = new HashMap<Player, ArrayList<Frame>>();
 
-    public void buildScoreMap(File file) {
-
+    @Override
+    public Map<Player, ArrayList<Frame>> buildScoreMap() {
         ArrayList<String> bowlingGameInformation = new ArrayList<String>();
         try
         {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(bowlingScoreFile));
             String line;
             while ((line = bufferedReader.readLine()) != null)
             {
@@ -46,6 +49,7 @@ public class ScoreMap implements ScoreMapServices {
             ex.printStackTrace();
         }
 
+        return  scoreMap;
     }
 
     @Override
@@ -98,7 +102,7 @@ public class ScoreMap implements ScoreMapServices {
                         .map(this::getScoreFromLine)
                         .collect(Collectors.toCollection(ArrayList::new));
 
-                ArrayList<Frame> frames = FrameScoreServicesImp.buildFrames(scoreFilteredByPlayer);
+                ArrayList<Frame> frames = frameScoreServices.buildFrames(scoreFilteredByPlayer);
 
                 scoreMap.put(player, frames);
             }
@@ -111,11 +115,11 @@ public class ScoreMap implements ScoreMapServices {
     }
 
     private  boolean isValidScoreLine(String[] scoreLine){
-        return scoreLine.length ==  Validations.VALID_SCORE_LINE_LENGTH.getValue();
+        return scoreLine.length ==  SystemConstant.VALID_SCORE_LINE_LENGTH.getValue();
     }
 
     private String getPlayerNameFromLine(String[] scoreLine){
-        return scoreLine[Validations.PLAYER_INDEX.getValue()];
+        return scoreLine[SystemConstant.PLAYER_INDEX.getValue()];
     }
 
     private String getPlayerNameFromLine(String scoreLine){
@@ -123,7 +127,7 @@ public class ScoreMap implements ScoreMapServices {
     }
 
     private String getScoreFromLine(String scoreLine){
-        return splitScoreLine(scoreLine)[Validations.SCORE_INDEX.getValue()];
+        return splitScoreLine(scoreLine)[SystemConstant.SCORE_INDEX.getValue()];
     }
 
     private boolean isValidPlayerName(String name){
@@ -131,20 +135,10 @@ public class ScoreMap implements ScoreMapServices {
     }
 
     private boolean hasMapValidKeySize(Set<Player> players){
-        return players.size() == Validations.VALID_KEY_MAP_SIZE.getValue();
+        return players.size() == SystemConstant.VALID_KEY_MAP_SIZE.getValue();
     }
 
     private Predicate<String> filterScoreByPlayerName(String playerNameFromMap){
         return playerName -> getPlayerNameFromLine(playerName).equals(playerNameFromMap);
     }
-
-    private String escapeFoulValues(String value)
-    {
-        if(value.toLowerCase().equals("f"))
-        {
-            return "0";
-        }
-        return  value;
-    }
-
 }

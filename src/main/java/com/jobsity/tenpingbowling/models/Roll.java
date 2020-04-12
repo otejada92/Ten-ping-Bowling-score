@@ -1,13 +1,13 @@
 package com.jobsity.tenpingbowling.models;
 
-import com.jobsity.tenpingbowling.Enums.RollType;
+import com.jobsity.tenpingbowling.Enums.ScoreType;
 
 public class Roll {
 
     private String score;
-    private RollType rollType;
+    private ScoreType rollType;
 
-    public Roll(String score, RollType rollType) {
+    public Roll(String score, ScoreType rollType) {
         this.score = score;
         this.rollType = rollType;
     }
@@ -20,11 +20,11 @@ public class Roll {
         this.score = score;
     }
 
-    public RollType getRollType() {
+    public ScoreType getRollType() {
         return rollType;
     }
 
-    public void setRollType(RollType rollType) {
+    public void setRollType(ScoreType rollType) {
         this.rollType = rollType;
     }
 }
