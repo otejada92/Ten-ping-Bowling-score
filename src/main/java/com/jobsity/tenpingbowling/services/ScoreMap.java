@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-public class ScoreMapServicesImp implements ScoreMapServices {
+public class ScoreMap implements ScoreMapServices {
 
     @Autowired
     private FrameScoreServices FrameScoreServicesImp;
@@ -136,6 +136,15 @@ public class ScoreMapServicesImp implements ScoreMapServices {
 
     private Predicate<String> filterScoreByPlayerName(String playerNameFromMap){
         return playerName -> getPlayerNameFromLine(playerName).equals(playerNameFromMap);
+    }
+
+    private String escapeFoulValues(String value)
+    {
+        if(value.toLowerCase().equals("f"))
+        {
+            return "0";
+        }
+        return  value;
     }
 
 }

@@ -6,6 +6,7 @@ public enum  RollType {
     STRIKE("strike"),
     SPARE("spare"),
     FOUL("foul"),
+    NO_PINGS_KNOCKED("no pings knocked"),
     NONE("none");
 
     private  String value;
