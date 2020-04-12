@@ -8,6 +8,6 @@ import java.util.Iterator;
 public interface FrameScoreServices {
 
     ArrayList<Frame> buildFrames(ArrayList<String> bowlingGameInformationByPlayerName);
-    Frame.Builder buildCommonFrameBuilder(Iterator<String> scoreIterator);
-    Frame.Builder build10thFrameBuilder(Iterator<String> scoreIterator);
+    Frame.Builder buildFrameBuilder(Iterator<String> scoreIterator);
+
 }

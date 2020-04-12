@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 
 @Service
-public class BowlingScoresServices {
+public class BowlingScores {
 
     @Autowired
     private ScoreMapServices mapScoreServices;
