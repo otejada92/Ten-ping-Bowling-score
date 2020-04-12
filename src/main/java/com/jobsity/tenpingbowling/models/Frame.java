@@ -49,6 +49,13 @@ public class Frame {
         this.bonusForTheNextRolls = bonusForTheNextRolls;
     }
 
+    public Roll getRollThree() {
+        return rollThree;
+    }
+
+    public void setRollThree(Roll rollThree) {
+        this.rollThree = rollThree;
+    }
 
 
     public static class Builder {
