@@ -15,6 +15,9 @@ public class TenthFrameCalculation implements CalculationStrategy {
     @Qualifier("normalCalculation")
     private CalculationStrategy normalCalculation;
 
+    @Autowired
+    private  ScoreParse scoreParse;
+
     @Override
     public int calculateScore(Frame unProcessedFrame, Frame... extraFrames) {
 
@@ -31,7 +34,7 @@ public class TenthFrameCalculation implements CalculationStrategy {
             default:
             {
                 unProcessedFrameScore = Stream.of(unProcessedFrame.getFirstRoll(), unProcessedFrame.getSecondRoll(), unProcessedFrame.getThirdRoll())
-                        .mapToInt(roll -> getIntegerRollScore(roll,"0"))
+                        .mapToInt(roll -> scoreParse.parseRollScoreToInteger(roll.getScore()))
                         .sum();
             }
         }

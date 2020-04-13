@@ -18,6 +18,9 @@ public class SpareCalculation implements CalculationStrategy {
     @Qualifier(value = "strikeCalculation")
     private CalculationStrategy strikeCalculation;
 
+    @Autowired
+    private  ScoreParse scoreParse;
+
     @Override
     public int calculateScore(Frame unProcessedFrame, Frame... pendingFrames) {
 
@@ -33,7 +36,7 @@ public class SpareCalculation implements CalculationStrategy {
             }
             default:
             {
-                extraPoint = getIntegerRollScore(nextFrame.getFirstRoll(), "0");
+                extraPoint = scoreParse.parseRollScoreToInteger(nextFrame.getFirstRoll().getScore());
                 break;
             }
         }

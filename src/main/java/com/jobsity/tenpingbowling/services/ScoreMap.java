@@ -2,8 +2,8 @@ package com.jobsity.tenpingbowling.services;
 
 import com.jobsity.tenpingbowling.Component.BowlingScoreFile;
 import com.jobsity.tenpingbowling.Enums.SystemConstant;
-import com.jobsity.tenpingbowling.interfaces.FrameScoreServices;
-import com.jobsity.tenpingbowling.interfaces.ScoreMapServices;
+import com.jobsity.tenpingbowling.interfaces.ScoreFrameService;
+import com.jobsity.tenpingbowling.interfaces.ScoreMapService;
 import com.jobsity.tenpingbowling.models.Frame;
 import com.jobsity.tenpingbowling.models.Player;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-public class ScoreMap implements ScoreMapServices {
+public class ScoreMap implements ScoreMapService {
 
     @Autowired
-    private FrameScoreServices frameScoreServices;
+    private ScoreFrameService scoreFrameService;
 
     @Autowired
     private BowlingScoreFile bowlingScoreFile;
@@ -102,7 +102,7 @@ public class ScoreMap implements ScoreMapServices {
                         .map(this::getScoreFromLine)
                         .collect(Collectors.toCollection(ArrayList::new));
 
-                ArrayList<Frame> frames = frameScoreServices.buildFrames(scoreFilteredByPlayer);
+                ArrayList<Frame> frames = scoreFrameService.getFrames(scoreFilteredByPlayer);
 
                 scoreMap.put(player, frames);
             }

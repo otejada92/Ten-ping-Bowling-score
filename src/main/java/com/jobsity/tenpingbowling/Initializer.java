@@ -1,6 +1,6 @@
 package com.jobsity.tenpingbowling;
 
-import com.jobsity.tenpingbowling.interfaces.FrameScoreCalculatorServices;
+import com.jobsity.tenpingbowling.interfaces.BowlingBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Initializer implements ApplicationRunner {
 
     @Autowired
-    private FrameScoreCalculatorServices frameScoreCalculatorServices;
+    private BowlingBoardService bowlingBoardService;
 
     public static void main(String[] args) {
         SpringApplication.run(Initializer.class, args);
@@ -22,7 +22,7 @@ public class Initializer implements ApplicationRunner {
 
         if (args.containsOption("file"))
         {
-            frameScoreCalculatorServices.calculateFrameScore();
+            bowlingBoardService.viewBowlingBoardResult();
         }
     }
 }

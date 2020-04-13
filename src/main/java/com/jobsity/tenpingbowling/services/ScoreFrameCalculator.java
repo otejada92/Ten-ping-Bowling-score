@@ -3,8 +3,8 @@ package com.jobsity.tenpingbowling.services;
 
 import com.jobsity.tenpingbowling.Enums.SystemConstant;
 import com.jobsity.tenpingbowling.interfaces.CalculationStrategy;
-import com.jobsity.tenpingbowling.interfaces.FrameScoreCalculatorServices;
-import com.jobsity.tenpingbowling.interfaces.ScoreMapServices;
+import com.jobsity.tenpingbowling.interfaces.ScoreFrameCalculatorService;
+import com.jobsity.tenpingbowling.interfaces.ScoreMapService;
 import com.jobsity.tenpingbowling.models.Frame;
 import com.jobsity.tenpingbowling.models.Player;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
 
 
 @Service
-public class FrameScoreCalculator implements FrameScoreCalculatorServices {
+public class ScoreFrameCalculator implements ScoreFrameCalculatorService {
 
     @Autowired
     @Qualifier(value = "normalCalculation")
@@ -39,17 +40,20 @@ public class FrameScoreCalculator implements FrameScoreCalculatorServices {
     private Map<Player, ArrayList<Frame>> frameMap;
 
     @Override
-    public void calculateFrameScore() {
+    public Map<Player, ArrayList<Frame>> calculateFrameScore() {
+
+        Map<Player, ArrayList<Frame>>  calculatedFrameMap = new HashMap<>();
 
         for (Player player : frameMap.keySet())
         {
-            System.out.println("Calculating score from: " + player.getName());
-
             ArrayList<Frame> frames = frameMap.get(player);
 
             ArrayList<Frame> calculateFrameScore = calculateFrameScore(frames);
 
+            calculatedFrameMap.put(player, calculateFrameScore);
         }
+
+        return calculatedFrameMap;
     }
 
     private ArrayList<Frame> calculateFrameScore(ArrayList<Frame> frames) {
@@ -100,7 +104,7 @@ public class FrameScoreCalculator implements FrameScoreCalculatorServices {
     }
 
     @Autowired
-    public void setFrameMap(ScoreMapServices mapScoreServices) {
+    public void setFrameMap(ScoreMapService mapScoreServices) {
         this.frameMap = mapScoreServices.buildScoreMap();
     }
 }
