@@ -2,7 +2,7 @@ package com.jobsity.tenpingbowling.services;
 
 import com.jobsity.tenpingbowling.Component.RollScore;
 import com.jobsity.tenpingbowling.Enums.ScoreType;
-import  com.jobsity.tenpingbowling.Enums.SystemConstant;
+import com.jobsity.tenpingbowling.Enums.SystemConstant;
 import com.jobsity.tenpingbowling.interfaces.FrameScoreServices;
 import com.jobsity.tenpingbowling.models.Frame;
 import com.jobsity.tenpingbowling.models.Roll;
@@ -11,10 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.function.BinaryOperator;
-
-
-//TODO: REMOVE STATIC STRING LIKE 10
 
 @Service
 public class FrameScore implements FrameScoreServices
@@ -77,8 +73,7 @@ public class FrameScore implements FrameScoreServices
             }
         }
 
-        if (!isLastRound)
-            addFrameType(frameBuilder);
+        addFrameType(frameBuilder);
 
         return frameBuilder.build();
     }

@@ -8,23 +8,11 @@ import org.springframework.stereotype.Component;
 public class NormalCalculation implements CalculationStrategy {
 
     @Override
-    public Frame calculateScore(Frame frame) {
+    public int calculateScore(Frame unProcessedFrame, Frame... pendingFrames) {
 
-        int firsRollValue = Integer.parseInt(frame.getFirstRoll().getScore());
-        int secondRollValue = Integer.parseInt(frame.getSecondRoll().getScore());
+        int firsRollValue = getIntegerRollScore(unProcessedFrame.getFirstRoll(), "0");
+        int secondRollValue = getIntegerRollScore(unProcessedFrame.getSecondRoll(), "0");
 
-        int frameScore = firsRollValue + secondRollValue;
-
-        return buildFrameCalculated(frame, frameScore);
-    }
-
-    @Override
-    public Frame buildFrameCalculated(Frame frame, int frameScore) {
-
-        return new Frame.Builder().round(frame.getRound())
-                .firstRoll(frame.getFirstRoll())
-                .secondRoll(frame.getSecondRoll())
-                .thirdRoll(frame.getThirdRoll())
-                .frameFinalScore(frameScore).build();
+        return Integer.sum(firsRollValue, secondRollValue);
     }
 }
