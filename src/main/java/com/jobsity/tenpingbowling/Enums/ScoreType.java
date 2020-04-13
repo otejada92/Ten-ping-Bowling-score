@@ -1,6 +1,6 @@
 package com.jobsity.tenpingbowling.Enums;
 
-public enum  RollType {
+public enum ScoreType {
 
     NORMAL("normal"),
     STRIKE("strike"),
@@ -11,7 +11,7 @@ public enum  RollType {
 
     private  String value;
 
-    RollType(String value) {
+    ScoreType(String value) {
         this.value = value;
     }
 

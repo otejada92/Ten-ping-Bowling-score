@@ -1,77 +1,106 @@
 package com.jobsity.tenpingbowling.models;
 
 
+import com.jobsity.tenpingbowling.Enums.ScoreType;
+
+import java.util.Objects;
+
 public class Frame {
 
     private int round;
-    private Roll rollOne;
-    private Roll rollTwo;
-    private Roll rollThree;
-    private int bonusForTheNextRolls; // this will be define by the rolltype || (normal, strike, Spare)
-    private Frame(Builder builder)
-    {
+    private Roll firstRoll;
+    private Roll secondRoll;
+    private Roll thirdRoll;
+    private int bonusByScoreType;
+    private int frameFinalScore;
+
+    private ScoreType frameScoreType;
+
+    private Frame(Builder builder) {
         this.round = builder.round;
-        this.rollOne = builder.rollOne;
-        this.rollTwo = builder.rollTwo;
-        this.rollThree = builder.rollThree;
-        this.bonusForTheNextRolls = builder.bonusForTheNextRolls;
+        this.firstRoll = builder.firstRoll;
+        this.secondRoll = builder.secondRoll;
+        this.thirdRoll = builder.thirdRoll;
+        this.bonusByScoreType = builder.bonusByScoreType;
+        this.frameFinalScore = builder.frameFinalScore;
+        this.frameScoreType = builder.frameScoreType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Frame frame = (Frame) o;
+        return round == frame.round;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(round);
     }
 
     public int getRound() {
         return round;
     }
 
-    public void setRound(int round) {
-        this.round = round;
+    public Roll getFirstRoll() {
+        return firstRoll;
     }
 
-    public Roll getRollOne() {
-        return rollOne;
+    public Roll getSecondRoll() {
+        return secondRoll;
     }
 
-    public void setRollOne(Roll rollOne) {
-        this.rollOne = rollOne;
+    public Roll getThirdRoll() {
+        return thirdRoll;
     }
 
-    public Roll getRollTwo() {
-        return rollTwo;
+    public int getFrameFinalScore() {
+        return frameFinalScore;
     }
 
-    public void setRollTwo(Roll rollTwo) {
-        this.rollTwo = rollTwo;
+    public void setFrameFinalScore(int frameFinalScore) {
+        this.frameFinalScore = frameFinalScore;
     }
 
-    public int getBonusForTheNextRolls() {
-        return bonusForTheNextRolls;
+    public ScoreType getFrameScoreType() {
+        return frameScoreType;
     }
 
-    public void setBonusForTheNextRolls(int bonusForTheNextRolls) {
-        this.bonusForTheNextRolls = bonusForTheNextRolls;
+    public int getBonusByScoreType() {
+        return bonusByScoreType;
     }
 
-    public Roll getRollThree() {
-        return rollThree;
+    public void setBonusByScoreType(int bonusByScoreType) {
+        this.bonusByScoreType = bonusByScoreType;
     }
-
-    public void setRollThree(Roll rollThree) {
-        this.rollThree = rollThree;
-    }
-
 
     public static class Builder {
 
         int round;
-        Roll rollOne;
-        Roll rollTwo;
-        int bonusForTheNextRolls;
-        Roll rollThree;
+
+        Roll firstRoll;
+        Roll secondRoll;
+        Roll thirdRoll;
+        int bonusByScoreType;
+        int frameFinalScore;
+        ScoreType frameScoreType;
 
         public  Builder(){}
 
+        public Roll getFirstRoll() {
+            return firstRoll;
+        }
+
+        public Roll getSecondRoll() {
+            return secondRoll;
+        }
+
         public Builder round(int round){this.round = round; return  this;}
-        public Builder rollOne(Roll rollOne){this.rollOne = rollOne; return  this;}
-        public Builder rollTwo(Roll rollTwo){this.rollTwo = rollTwo; return  this;}
-        public Builder rollThree(Roll rollThree){this.rollThree = rollThree; return  this;}
+        public Builder firstRoll(Roll firstRoll){this.firstRoll = firstRoll; return  this;}
+        public Builder secondRoll(Roll secondRoll){this.secondRoll = secondRoll; return  this;}
+        public Builder thirdRoll(Roll thirdRoll){this.thirdRoll = thirdRoll; return  this;}
+        public Builder frameScoreType(ScoreType frameScoreType){this.frameScoreType = frameScoreType; return  this;}
 
         public Frame build(){return new Frame(this);}
     }
