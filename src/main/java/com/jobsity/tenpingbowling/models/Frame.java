@@ -1,6 +1,5 @@
 package com.jobsity.tenpingbowling.models;
 
-
 import com.jobsity.tenpingbowling.Enums.ScoreType;
 
 import java.util.Objects;
@@ -95,6 +94,8 @@ public class Frame {
         public Roll getSecondRoll() {
             return secondRoll;
         }
+
+        public int getRound(){return  round;}
 
         public Builder round(int round){this.round = round; return  this;}
         public Builder firstRoll(Roll firstRoll){this.firstRoll = firstRoll; return  this;}

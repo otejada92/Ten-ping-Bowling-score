@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 
@@ -18,10 +17,13 @@ public class StrikeCalculation implements CalculationStrategy {
     @Qualifier("normalCalculation")
     private CalculationStrategy normalCalculation;
 
+    @Autowired
+    private  ScoreParse scoreParse;
+
     @Override
     public int calculateScore(Frame unProcessedFrame, Frame... pendingFrames) {
 
-        int scoreCalculated = 0;
+        int scoreCalculated;
         int unProcessedFrameScore = normalCalculation.calculateScore(unProcessedFrame);
         Frame frameAfterFrameToCalculate = pendingFrames[0];
 
@@ -33,7 +35,7 @@ public class StrikeCalculation implements CalculationStrategy {
             Frame frameAfterSecondStrike = pendingFrames[(pendingFrames.length > 1) ? 1 : 0];
 
             if ((pendingFrames.length > 1) )
-                extraScore = getIntegerRollScore(frameAfterSecondStrike.getFirstRoll(), "0");
+                extraScore = scoreParse.parseRollScoreToInteger(frameAfterSecondStrike.getFirstRoll().getScore());
 
             scoreCalculated = Stream.of(unProcessedFrameScore, scoreSecondStrike, extraScore).mapToInt(Integer::intValue).sum();
 

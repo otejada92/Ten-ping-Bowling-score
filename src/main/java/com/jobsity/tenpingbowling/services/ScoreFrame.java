@@ -3,7 +3,7 @@ package com.jobsity.tenpingbowling.services;
 import com.jobsity.tenpingbowling.Component.RollScore;
 import com.jobsity.tenpingbowling.Enums.ScoreType;
 import com.jobsity.tenpingbowling.Enums.SystemConstant;
-import com.jobsity.tenpingbowling.interfaces.FrameScoreServices;
+import com.jobsity.tenpingbowling.interfaces.ScoreFrameService;
 import com.jobsity.tenpingbowling.models.Frame;
 import com.jobsity.tenpingbowling.models.Roll;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,32 +13,35 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 @Service
-public class FrameScore implements FrameScoreServices
+public class ScoreFrame implements ScoreFrameService
 {
     private Roll firstRoll;
     private Roll secondRoll;
-    private int frameRound = 1;
 
     @Autowired
     private RollScore rollScore;
 
     @Override
-    public ArrayList<Frame> buildFrames(ArrayList<String> bowlingGameInformationByPlayerName) {
+    public ArrayList<Frame> getFrames(ArrayList<String> bowlingGameInformationByPlayerName) {
 
         ArrayList<Frame> frames = new ArrayList<>();
 
         Iterator<String> scoreIterator = bowlingGameInformationByPlayerName.iterator();
+        int frameRound = 1;
+
         do
         {
-            Frame frame;
+            Frame.Builder frameBuilder = new Frame.Builder();
+
+            frameBuilder.round(frameRound);
+
             String firstRollScore = scoreIterator.next();
 
             firstRoll = rollScore.getRoll(firstRollScore, false, false);
 
+            frameBuilder =  buildFrameBuilder(scoreIterator, frameBuilder);
 
-            frame =  buildFrameBuilder(scoreIterator);
-
-            frames.add(frame);
+            frames.add(frameBuilder.build());
             frameRound++;
 
         }while (scoreIterator.hasNext());
@@ -47,59 +50,52 @@ public class FrameScore implements FrameScoreServices
     }
 
     @Override
-    public Frame buildFrameBuilder(Iterator<String> scoreIterator) {
+    public Frame.Builder buildFrameBuilder(Iterator<String> scoreIterator, Frame.Builder frameBuilder) {
 
-        Frame.Builder frameBuilder = new Frame.Builder();
-        frameBuilder.round(frameRound).firstRoll(firstRoll).build();
-        boolean isLastRound = isLastRound();
+        frameBuilder.firstRoll(firstRoll).build();
 
-        switch (firstRoll.getRollType())
-        {
-            case STRIKE:
-            {
-                if (isLastRound)
-                {
-                    addNextScoresIntoFrame(scoreIterator, frameBuilder);
-                    break;
-                }
-                else
-                    secondRoll = new Roll("0", ScoreType.NONE);
-                break;
-            }
-            default:
-            {
-                addNextScoresIntoFrame(scoreIterator, frameBuilder);
-                break;
-            }
-        }
+        addNextScoresIntoFrame(scoreIterator, frameBuilder);
 
         addFrameType(frameBuilder);
 
-        return frameBuilder.build();
+        return frameBuilder;
     }
 
-    private void addNextScoresIntoFrame(Iterator<String> scoreIterator, Frame.Builder frame) {
+    private void addNextScoresIntoFrame(Iterator<String> scoreIterator, Frame.Builder frameBuilder) {
 
-        String secondRollScore = scoreIterator.next();
+        String secondRollScore;
         String extraRollScore;
-        Roll extraRoll = null;
+        Roll extraRoll;
 
-        secondRoll = rollScore.getRoll(secondRollScore, rollScore.isFoulRoll(firstRoll.getScore()), rollScore.isSpareRoll(firstRoll.getScore(), secondRollScore));
-
-        if (frameRound == 10)
+        if (frameBuilder.getFirstRoll().getRollType() != ScoreType.STRIKE)
         {
+            secondRollScore = scoreIterator.next();
+            secondRoll =  getRollFrame(secondRollScore, firstRoll.getScore());
+            extraRoll = new Roll("0", ScoreType.NONE);
+        }
+        else
+        {
+            secondRoll = new Roll("0", ScoreType.NONE);
+            extraRoll = new Roll("0", ScoreType.NONE);
+        }
+
+        if (isLastRound(frameBuilder.getRound()))
+        {
+            secondRollScore = scoreIterator.next();
+            secondRoll =  getRollFrame(secondRollScore, firstRoll.getScore());
             if (firstRoll.getRollType() == ScoreType.STRIKE || secondRoll.getRollType() == ScoreType.SPARE)
             {
                 extraRollScore = scoreIterator.next();
-                extraRoll = rollScore.getRoll(extraRollScore, rollScore.isFoulRoll(secondRoll.getScore()), rollScore.isSpareRoll(secondRoll.getScore(), extraRollScore));
+                extraRoll = getRollFrame(extraRollScore, secondRollScore);
 
             }
             else
                 extraRoll = new Roll("0", ScoreType.NONE);
-
         }
-        frame.secondRoll(secondRoll).thirdRoll(extraRoll);
+
+        frameBuilder.secondRoll(secondRoll).thirdRoll(extraRoll);
     }
+
 
     private void addFrameType(Frame.Builder builder) {
 
@@ -127,8 +123,12 @@ public class FrameScore implements FrameScoreServices
         return  frameScoreType;
     }
 
-    private boolean isLastRound(){
+    private boolean isLastRound(int frameRound){
         return frameRound == SystemConstant.LAST_ROUND_ID.getValue();
+    }
+
+    private Roll getRollFrame(String currentRollScore, String previousRollScore){
+        return rollScore.getRoll(currentRollScore, rollScore.isFoulRoll(previousRollScore), rollScore.isSpareRoll(previousRollScore, currentRollScore));
     }
 }
 

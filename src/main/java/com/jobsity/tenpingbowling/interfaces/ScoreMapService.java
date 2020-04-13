@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-public interface ScoreMapServices
+public interface ScoreMapService
 {
     Map<Player, ArrayList<Frame>> buildScoreMap();
     void addPlayers(ArrayList<String> scoreLine);
