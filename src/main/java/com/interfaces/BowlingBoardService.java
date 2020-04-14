@@ -1,4 +1,4 @@
-package com.tenpingbowling.interfaces;
+package com.interfaces;
 
 public interface BowlingBoardService {
 

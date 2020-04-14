@@ -1,11 +1,11 @@
-package com.tenpingbowling.services;
+package com.services;
 
-import com.tenpingbowling.Component.BowlingScoreFile;
-import com.tenpingbowling.Enums.SystemConstant;
-import com.tenpingbowling.interfaces.ScoreFrameService;
-import com.tenpingbowling.interfaces.ScoreMapService;
-import com.tenpingbowling.models.Frame;
-import com.tenpingbowling.models.Player;
+import com.Component.BowlingScoreFile;
+import com.Enums.SystemConstant;
+import com.interfaces.ScoreFrameService;
+import com.interfaces.ScoreMapService;
+import com.models.Frame;
+import com.models.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

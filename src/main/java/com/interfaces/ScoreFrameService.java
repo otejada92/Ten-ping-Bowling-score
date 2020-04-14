@@ -1,6 +1,6 @@
-package com.tenpingbowling.interfaces;
+package com.interfaces;
 
-import com.tenpingbowling.models.Frame;
+import com.models.Frame;
 
 import java.util.ArrayList;
 import java.util.Iterator;

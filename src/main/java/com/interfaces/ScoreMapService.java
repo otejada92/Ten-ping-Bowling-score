@@ -1,7 +1,7 @@
-package com.tenpingbowling.interfaces;
+package com.interfaces;
 
-import com.tenpingbowling.models.Frame;
-import com.tenpingbowling.models.Player;
+import com.models.Frame;
+import com.models.Player;
 
 import java.util.ArrayList;
 import java.util.Map;
