@@ -62,7 +62,7 @@ public class ScoreMap implements ScoreMapService {
 
         Player player;
         Iterator<String> scoreIterator  = bowlingGameInformation.iterator();
-        int maxIteration = 3;
+        int maxIteration = 4;
         do
         {
 
@@ -79,9 +79,6 @@ public class ScoreMap implements ScoreMapService {
                     player.setName(playerName);
 
                     scoreMap.put(player, null);
-
-                    if (hasMapValidKeySize(scoreMap.keySet()))
-                        break;
                 }
             }
             else
@@ -99,20 +96,17 @@ public class ScoreMap implements ScoreMapService {
 
         ArrayList<String> scoreFilteredByPlayer;
 
-        if (hasMapValidKeySize(players))
+        for (Player player : players)
         {
-            for (Player player : players)
-            {
-                scoreFilteredByPlayer = bowlingGameInformation
-                        .stream()
-                        .filter(filterScoreByPlayerName(player.getName()))
-                        .map(this::getScoreFromLine)
-                        .collect(Collectors.toCollection(ArrayList::new));
+            scoreFilteredByPlayer = bowlingGameInformation
+                    .stream()
+                    .filter(filterScoreByPlayerName(player.getName()))
+                    .map(this::getScoreFromLine)
+                    .collect(Collectors.toCollection(ArrayList::new));
 
-                ArrayList<Frame> frames = scoreFrameService.getFrames(scoreFilteredByPlayer);
+            ArrayList<Frame> frames = scoreFrameService.getFrames(scoreFilteredByPlayer);
 
-                scoreMap.put(player, frames);
-            }
+            scoreMap.put(player, frames);
         }
 
     }
@@ -139,10 +133,6 @@ public class ScoreMap implements ScoreMapService {
 
     private boolean isValidPlayerName(String name){
         return !StringUtils.isEmpty(name) && !name.matches(".*\\d.*");
-    }
-
-    private boolean hasMapValidKeySize(Set<Player> players){
-        return players.size() == SystemConstant.MIN_PLAYER_LENGTH.getValue();
     }
 
     private Predicate<String> filterScoreByPlayerName(String playerNameFromMap){
