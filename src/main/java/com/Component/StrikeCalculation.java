@@ -1,8 +1,8 @@
-package com.tenpingbowling.Component;
+package com.Component;
 
-import com.tenpingbowling.Enums.ScoreType;
-import com.tenpingbowling.interfaces.CalculationStrategy;
-import com.tenpingbowling.models.Frame;
+import com.interfaces.CalculationStrategy;
+import com.models.Frame;
+import com.Enums.ScoreType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

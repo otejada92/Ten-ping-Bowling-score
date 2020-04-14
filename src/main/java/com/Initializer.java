@@ -1,6 +1,6 @@
-package com.tenpingbowling;
+package com;
 
-import com.tenpingbowling.interfaces.BowlingBoardService;
+import com.interfaces.BowlingBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

@@ -1,4 +1,4 @@
-package com.tenpingbowling.models;
+package com.models;
 
 public class Player {
 

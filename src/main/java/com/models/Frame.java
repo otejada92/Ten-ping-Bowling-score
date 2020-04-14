@@ -1,6 +1,6 @@
-package com.tenpingbowling.models;
+package com.models;
 
-import com.tenpingbowling.Enums.ScoreType;
+import com.Enums.ScoreType;
 
 import java.util.Objects;
 

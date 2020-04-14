@@ -1,4 +1,4 @@
-package com.tenpingbowling.Component;
+package com.Component;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

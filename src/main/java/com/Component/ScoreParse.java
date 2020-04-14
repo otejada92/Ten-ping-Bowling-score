@@ -1,6 +1,6 @@
-package com.tenpingbowling.Component;
+package com.Component;
 
-import com.tenpingbowling.models.Roll;
+import com.models.Roll;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

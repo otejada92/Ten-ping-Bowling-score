@@ -1,11 +1,11 @@
-package com.tenpingbowling.services;
+package com.services;
 
-import com.tenpingbowling.Component.RollScore;
-import com.tenpingbowling.Enums.ScoreType;
-import com.tenpingbowling.Enums.SystemConstant;
-import com.tenpingbowling.interfaces.ScoreFrameService;
-import com.tenpingbowling.models.Frame;
-import com.tenpingbowling.models.Roll;
+import com.Component.RollScore;
+import com.Enums.SystemConstant;
+import com.interfaces.ScoreFrameService;
+import com.Enums.ScoreType;
+import com.models.Frame;
+import com.models.Roll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

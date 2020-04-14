@@ -1,16 +1,18 @@
-package com.tenpingbowling;
+package com;
 
-import com.tenpingbowling.services.ScoreMap;
-import org.junit.Test;
+import com.services.ScoreMap;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.Map;
 
+
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class DemoApplicationTests {
+public class ScoreMapTest {
+
 
 	@Autowired
 	private ScoreMap scoreMapServiceImp;
@@ -19,7 +21,7 @@ public class DemoApplicationTests {
 	public void getScoreMap_AssertTrue_IfTenFrameFound(){
 
 		Map map = scoreMapServiceImp.getScoreMap();
-//		Assert.assertNotEquals(map.keySet().size(), 1);
+
 
 	}
 }

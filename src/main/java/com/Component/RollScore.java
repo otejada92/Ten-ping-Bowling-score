@@ -1,9 +1,9 @@
-package com.tenpingbowling.Component;
+package com.Component;
 
-import com.tenpingbowling.models.Roll;
+import com.models.Roll;
 import org.springframework.stereotype.Component;
 
-import static com.tenpingbowling.Enums.ScoreType.*;
+import static com.Enums.ScoreType.*;
 
 @Component
 public class RollScore {
