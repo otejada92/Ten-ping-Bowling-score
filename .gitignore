@@ -1,11 +1,15 @@
 # Compiled class file
 *.class
 
+
 # Log file
 *.log
 
-# BlueJ files
-*.ctxt
+# IDE files
+.idea/
+.classpath
+.project
+.settings/
 
 # Package Files #
 *.jar
@@ -15,6 +19,7 @@
 *.zip
 *.tar.gz
 *.rar
+*/META-INF/*
 
 
 # Maven project#
@@ -30,8 +35,6 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 .flattened-pom.xml
-.idea/
-*/META-INF/*
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
