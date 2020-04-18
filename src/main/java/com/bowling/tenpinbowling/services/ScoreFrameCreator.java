@@ -1,7 +1,7 @@
 package com.bowling.tenpinbowling.services;
 
 import com.bowling.tenpinbowling.Enums.SystemConstant;
-import com.bowling.tenpinbowling.interfaces.ScoreFrameService;
+import com.bowling.tenpinbowling.interfaces.ScoreFrameCreatorService;
 import com.bowling.tenpinbowling.Enums.ScoreType;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Roll;
@@ -14,7 +14,7 @@ import java.util.Iterator;
  * Build Frames base score.
  */
 @Service
-public class ScoreFrameImp implements ScoreFrameService {
+public class ScoreFrameCreator implements ScoreFrameCreatorService {
 
     @Override
     public ArrayList<Frame> getScoreFrames(ArrayList<String> bowlingGameInformationByPlayerName) {
@@ -30,7 +30,7 @@ public class ScoreFrameImp implements ScoreFrameService {
 
             frameBuilder.round(frameRound);
 
-            frameBuilder =  getFrameScoreBuilder(scoreIterator, frameBuilder);
+            buildFrameScoreBuilder(scoreIterator, frameBuilder);
 
             frames.add(frameBuilder.build());
             frameRound++;
@@ -40,7 +40,7 @@ public class ScoreFrameImp implements ScoreFrameService {
     }
 
     @Override
-    public Frame.Builder getFrameScoreBuilder(Iterator<String> scoreIterator, Frame.Builder frameBuilder) {
+    public void buildFrameScoreBuilder(Iterator<String> scoreIterator, Frame.Builder frameBuilder) {
 
         String firstRollScore = scoreIterator.next();
 
@@ -52,7 +52,6 @@ public class ScoreFrameImp implements ScoreFrameService {
 
         addFrameType(frameBuilder);
 
-        return frameBuilder;
     }
 
     @Override

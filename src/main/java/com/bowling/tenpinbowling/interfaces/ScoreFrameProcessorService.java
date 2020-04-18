@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-public interface ScoreFrameCalculatorService {
+public interface ScoreFrameProcessorService {
 
-    Map<Player, ArrayList<Frame>> calculateFrameScore(File bowlingFrameScore);
+    Map<Player, ArrayList<Frame>> calculateFrameScore(Map<Player, ArrayList<Frame>> scoreMap);
 }

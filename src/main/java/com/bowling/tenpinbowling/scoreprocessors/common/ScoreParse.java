@@ -1,5 +1,4 @@
-package com.bowling.tenpinbowling.scoreprocessors;
-
+package com.bowling.tenpinbowling.scoreprocessors.common;
 
 class ScoreParse {
 

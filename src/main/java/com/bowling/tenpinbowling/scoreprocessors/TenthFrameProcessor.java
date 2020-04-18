@@ -1,6 +1,7 @@
 package com.bowling.tenpinbowling.scoreprocessors;
 
 import com.bowling.tenpinbowling.models.Frame;
+import com.bowling.tenpinbowling.scoreprocessors.common.ScoreProcessor;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;

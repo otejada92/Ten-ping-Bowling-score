@@ -1,6 +1,6 @@
 # Ten-ping-Bowling-score
 
-# About
+## About
 
 Ten ping bowling is a spring boot app for calculating bowling score
 
@@ -16,16 +16,15 @@ Ten ping bowling is a spring boot app for calculating bowling score
 Maven 3.3+
 ```
 ```
-Java 8
+Java 8 
 ```
 
-##Installation reference
+## Installation reference
 
 * [Java](https://www.oracle.com/java/technologies/javase-jre8-downloads.html) 
 * [Maven](https://maven.apache.org/download.cgi)
 
-### How to run
-NOTE: File path is passing through --file arg so don't forget it! :shipit:
+## How to run
 
 #### First alternative
 1. Move to the project folder which contains the pom.xml file and use the below command.
@@ -42,26 +41,29 @@ NOTE: File path is passing through --file arg so don't forget it! :shipit:
 1. Move to the project folder which contains the pom.xml file and use the below command.
 2. Run below command.
     ```
-    mvn spring-boot:run -Dspring-boot.run.arguments=--file=X:\xxx\xxx\src\main\resources\normal-game.txt
+    mvn spring-boot:run -Dspring-boot.run.arguments=--file=X:\\xxx\\xxx\\src\\main\\resources\\normal-game.txt
     ```
-##Test
-Test naming convention
+**NOTE:** File path is passing through --file arg so don't forget it! :shipit:
+
+## Test
+
+#### Test naming convention
 * MethodName_StateUnderTest_ExpectedBehavior
-### Running the tests
+#### Running the tests
 
-##### Run all the unit test classes.
-```mvn test```
+#### Run all the unit test classes.
+```mvn test```test
 
-##### Run a single test class.
-```mvn -Dtest=ScoreMapTest test```
+#### Run a single test class.
+```mvn -Dtest=ScoreParseTest test```
 
-##### Run multiple test classes.
-```mvn -Dtest=ScoreMapTest,ScoreFrameTest test```
+#### Run multiple test classes.
+```mvn -Dtest=ScoreParseTest,ScoreFrameCreatorTest test```
 
 ##### Run a single test method from a test class.
-```mvn -Dtest=ProcessorsTest#calculateScore_FrameWithScoreNormalType_AssertEqualTrue test```
+```mvn -Dtest=ScoreParseTest#retrievePlayers_NormalGameTwoPlayers_AssertEqualTrue test```
 
-##### Resources for testing
+## Resources for testing
 
 * [Normal game(2 players)](https://github.com/otejada92/Ten-ping-Bowling-score/blob/master/src/main/resources/normal-game.txt) 
 * [Perfect score](https://github.com/otejada92/Ten-ping-Bowling-score/blob/master/src/main/resources/perfect-score.txt) 

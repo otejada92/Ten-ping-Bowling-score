@@ -1,8 +1,8 @@
 package com.bowling.tenpinbowling.services;
 
 import com.bowling.tenpinbowling.Enums.SystemConstant;
-import com.bowling.tenpinbowling.interfaces.ScoreFrameService;
-import com.bowling.tenpinbowling.interfaces.ScoreMapService;
+import com.bowling.tenpinbowling.interfaces.ScoreFrameCreatorService;
+import com.bowling.tenpinbowling.interfaces.ScoreParseService;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
  * Parse the scores into a Map<{@link Player}, ArrayList<{@link Frame}>>.
 */
 @Service
-public class ScoreMapImp implements ScoreMapService {
+public class ScoreParse implements ScoreParseService {
 
     @Autowired
-    private ScoreFrameService scoreFrameService;
+    private ScoreFrameCreatorService scoreFrameCreatorService;
 
     @Override
     public Map<Player, ArrayList<Frame>> buildScoreMap(File bowlingGameInfo) {
@@ -37,13 +37,13 @@ public class ScoreMapImp implements ScoreMapService {
         {
             bowlingGameInformation = parseBowlingGameInfo(bowlingGameInfo);
 
-            Set<Player> players = getPlayers(bowlingGameInformation);
+            Set<Player> players = retrievePlayers(bowlingGameInformation);
 
             for (Player player : players)
             {
                 ArrayList<String> scoreGameFilteredByPlayer = getBowlingGameInfoFilteredByPlayer(bowlingGameInformation, player);
 
-                ArrayList<Frame> playerScore = getScoreFrameByPlayer(player, scoreGameFilteredByPlayer);
+                ArrayList<Frame> playerScore = retrieveScorePlayer(player, scoreGameFilteredByPlayer);
 
                 scoreMap.put(player, playerScore);
             }
@@ -76,7 +76,7 @@ public class ScoreMapImp implements ScoreMapService {
     }
 
     @Override
-    public Set<Player> getPlayers(ArrayList<String> bowlingGameInformation) {
+    public Set<Player> retrievePlayers(ArrayList<String> bowlingGameInformation) {
 
         Player player;
         Set<Player> players = new HashSet<>();
@@ -113,8 +113,8 @@ public class ScoreMapImp implements ScoreMapService {
     }
 
     @Override
-    public ArrayList<Frame> getScoreFrameByPlayer(Player player, ArrayList<String> scoreFilteredByPlayer) {
-        return scoreFrameService.getScoreFrames(scoreFilteredByPlayer);
+    public ArrayList<Frame> retrieveScorePlayer(Player player, ArrayList<String> scoreFilteredByPlayer) {
+        return scoreFrameCreatorService.getScoreFrames(scoreFilteredByPlayer);
     }
 
     private String[] splitScoreLine(String scoreLine){

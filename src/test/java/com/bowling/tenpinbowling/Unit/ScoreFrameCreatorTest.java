@@ -3,7 +3,7 @@ package com.bowling.tenpinbowling.Unit;
 import com.bowling.tenpinbowling.Enums.ScoreType;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Roll;
-import com.bowling.tenpinbowling.services.ScoreFrameImp;
+import com.bowling.tenpinbowling.services.ScoreFrameCreator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,10 +15,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 
 
-@SpringBootTest(classes = {ScoreFrameImp.class})
+@SpringBootTest(classes = {com.bowling.tenpinbowling.services.ScoreFrameCreator.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("classpath:application-test.properties")
-public class ScoreFrameTest {
+public class ScoreFrameCreatorTest {
 
 
     @Value("${normal.score}")
@@ -28,20 +28,21 @@ public class ScoreFrameTest {
     private ArrayList<String> frameScore;
 
     @Autowired
-    private ScoreFrameImp scoreFrameServiceImp;
+    private ScoreFrameCreator scoreFrameCreator;
 
 
     @Test
     public void getScoreFrames_TenValidFrameScore_ReturnTrue(){
 
-        ArrayList<Frame> frames = scoreFrameServiceImp.getScoreFrames(filteredScore);
+        ArrayList<Frame> frames = scoreFrameCreator.getScoreFrames(filteredScore);
         Assert.assertEquals(10, frames.size());
     }
 
     @Test
     public void getFrameScoreBuilder_NormalRollScores_AssertEqualTrue()
     {
-        Frame.Builder frameBuilder = scoreFrameServiceImp.getFrameScoreBuilder(frameScore.iterator(), new Frame.Builder());
+        Frame.Builder frameBuilder = new Frame.Builder();
+        scoreFrameCreator.buildFrameScoreBuilder(frameScore.iterator(),frameBuilder);
         Assert.assertNotNull(frameBuilder);
         Assert.assertEquals(ScoreType.NORMAL, frameBuilder.getFrameScoreType());
     }
@@ -83,7 +84,7 @@ public class ScoreFrameTest {
 
     private Roll getRoll(String scoreToEval, String previosScore)
     {
-        return scoreFrameServiceImp.buildRollFrame(scoreToEval, previosScore);
+        return scoreFrameCreator.buildRollFrame(scoreToEval, previosScore);
     }
 
 
