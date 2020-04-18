@@ -6,10 +6,10 @@ import com.bowling.tenpinbowling.models.Roll;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public interface ScoreFrameService {
+public interface ScoreFrameCreatorService {
 
     ArrayList<Frame> getScoreFrames(ArrayList<String> bowlingGameInformationByPlayerName);
-    Frame.Builder getFrameScoreBuilder(Iterator<String> scoreIterator, Frame.Builder frameBuilder);
+    void buildFrameScoreBuilder(Iterator<String> scoreIterator, Frame.Builder frameBuilder);
     Roll buildRollFrame(String scoreToEval, String previousRollScore);
 
 }

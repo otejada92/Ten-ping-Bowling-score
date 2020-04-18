@@ -3,6 +3,7 @@ package com.bowling.tenpinbowling.scoreprocessors;
 import com.bowling.tenpinbowling.interfaces.ProcessorStrategy;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.Enums.ScoreType;
+import com.bowling.tenpinbowling.scoreprocessors.common.ScoreProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

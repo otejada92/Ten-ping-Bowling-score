@@ -2,7 +2,8 @@ package com.bowling.tenpinbowling.services;
 
 import com.bowling.tenpinbowling.Enums.SystemConstant;
 import com.bowling.tenpinbowling.interfaces.BowlingBoardService;
-import com.bowling.tenpinbowling.interfaces.ScoreFrameCalculatorService;
+import com.bowling.tenpinbowling.interfaces.ScoreFrameProcessorService;
+import com.bowling.tenpinbowling.interfaces.ScoreParseService;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
 import com.bowling.tenpinbowling.models.Roll;
@@ -18,10 +19,13 @@ import java.util.stream.Collectors;
  * Prints bowling score result
  */
 @Service
-public class BowlingBoard implements BowlingBoardService {
+public class BowlingBoardPrinter implements BowlingBoardService {
 
     @Autowired
-    private ScoreFrameCalculatorService scoreFrameCalculatorService;
+    private ScoreFrameProcessorService scoreFrameProcessorService;
+
+    @Autowired
+    ScoreParseService scoreParseService;
 
     private String format = "%10s %10s %10s %10s %10s %10s %10s %10s %10s %10s \n";
 
@@ -31,14 +35,17 @@ public class BowlingBoard implements BowlingBoardService {
     @Override
     public void viewBowlingBoardResult() {
 
+
         try
         {
             File file = new File(filePath);
 
-            Map<Player, ArrayList<Frame>> calculatedFrameMap = scoreFrameCalculatorService.calculateFrameScore(file);
+            Map<Player, ArrayList<Frame>> scoreMap = scoreParseService.buildScoreMap(file);
 
-            for (Player player : calculatedFrameMap.keySet()) {
-                ArrayList<Frame> framesInfo = calculatedFrameMap.get(player);
+            Map<Player, ArrayList<Frame>> frameScoreResult = scoreFrameProcessorService.calculateFrameScore(scoreMap);
+
+            for (Player player : frameScoreResult.keySet()) {
+                ArrayList<Frame> framesInfo = frameScoreResult.get(player);
 
                 showFrameRoundLane(framesInfo);
                 showPlayerLaneInfo(player);

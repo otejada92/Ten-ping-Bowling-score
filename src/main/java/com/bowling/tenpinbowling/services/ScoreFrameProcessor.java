@@ -3,8 +3,8 @@ package com.bowling.tenpinbowling.services;
 
 import com.bowling.tenpinbowling.Enums.SystemConstant;
 import com.bowling.tenpinbowling.interfaces.ProcessorStrategy;
-import com.bowling.tenpinbowling.interfaces.ScoreFrameCalculatorService;
-import com.bowling.tenpinbowling.interfaces.ScoreMapService;
+import com.bowling.tenpinbowling.interfaces.ScoreFrameProcessorService;
+import com.bowling.tenpinbowling.interfaces.ScoreParseService;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import java.util.Map;
  * Calculate Frame score.
  */
 @Service
-public class ScoreFrameCalculatorImp implements ScoreFrameCalculatorService {
+public class ScoreFrameProcessor implements ScoreFrameProcessorService {
 
     @Autowired
     @Qualifier(value = "normalScoreProcessor")
@@ -38,24 +39,21 @@ public class ScoreFrameCalculatorImp implements ScoreFrameCalculatorService {
     @Qualifier(value = "tenthFrameProcessor")
     private ProcessorStrategy tenthFrameProcessor;
 
-    @Autowired
-    private ScoreMapService scoreMapService;
-
     @Override
-    public Map<Player, ArrayList<Frame>> calculateFrameScore(File bowlingFrameScore) {
+    public Map<Player, ArrayList<Frame>> calculateFrameScore(Map<Player, ArrayList<Frame>> scoreMap) {
 
-        Map<Player, ArrayList<Frame>> frameMap = scoreMapService.buildScoreMap(bowlingFrameScore);
+        Map<Player, ArrayList<Frame>> calculatedFrames = new HashMap<>();
 
-        for (Player player : frameMap.keySet())
+        for (Player player : scoreMap.keySet())
         {
-            ArrayList<Frame> frames = frameMap.get(player);
+            ArrayList<Frame> frames = scoreMap.get(player);
 
             ArrayList<Frame> calculateFrameScore = calculateFrameScore(frames);
 
-            frameMap.put(player, calculateFrameScore);
+            calculatedFrames.put(player, calculateFrameScore);
         }
 
-        return frameMap;
+        return calculatedFrames;
     }
 
     private ArrayList<Frame> calculateFrameScore(ArrayList<Frame> frames) {

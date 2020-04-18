@@ -1,16 +1,16 @@
-package com.bowling.tenpinbowling.scoreprocessors;
+package com.bowling.tenpinbowling.scoreprocessors.common;
 
 import com.bowling.tenpinbowling.interfaces.ProcessorStrategy;
 
-abstract class ScoreProcessor implements ProcessorStrategy {
+public abstract class ScoreProcessor implements ProcessorStrategy {
 
     private ScoreParse scoreParse;
 
-    ScoreProcessor(){
+    public ScoreProcessor(){
         scoreParse = new ScoreParse();
     }
 
-    int parseRollScoreToInteger(String score){
+    protected int parseRollScoreToInteger(String score){
 
         return scoreParse.parseRollScoreToInteger(score);
     }

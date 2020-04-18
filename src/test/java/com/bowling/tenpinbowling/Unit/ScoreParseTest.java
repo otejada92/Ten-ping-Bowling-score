@@ -3,8 +3,8 @@ package com.bowling.tenpinbowling.Unit;
 
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
-import com.bowling.tenpinbowling.services.ScoreFrameImp;
-import com.bowling.tenpinbowling.services.ScoreMapImp;
+import com.bowling.tenpinbowling.services.ScoreFrameCreator;
+import com.bowling.tenpinbowling.services.ScoreParse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,13 +21,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
-@SpringBootTest(classes = {ScoreMapImp.class, ScoreFrameImp.class})
+@SpringBootTest(classes = {ScoreParse.class, ScoreFrameCreator.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("classpath:application-test.properties")
-public class ScoreMapTest {
+public class ScoreParseTest {
 
     @Autowired
-    private ScoreMapImp scoreMapServiceImp;
+    private ScoreParse scoreParse;
 
     private ArrayList<String> scoreLine;
 
@@ -40,26 +40,26 @@ public class ScoreMapTest {
     public void setUp() throws IOException {
 
         URL normalScore = this.getClass().getResource("/normal-game.txt");
-        scoreLine = scoreMapServiceImp.parseBowlingGameInfo(new File(normalScore.getFile()));
+        scoreLine = scoreParse.parseBowlingGameInfo(new File(normalScore.getFile()));
     }
 
     @Test
-    public void getPlayers_NormalGameTwoPlayers_AssertEqualTrue() {
+    public void retrievePlayers_NormalGameTwoPlayers_AssertEqualTrue() {
 
         Set<Player> players = getPlayerFromScoreLine();
         Assert.assertEquals(2, players.size());
     }
 
     @Test
-    public void  getScoreFrame_NormalGameTwoPlayers_AssertEqualTrue() {
+    public void  retrieveScorePlayer_NormalGameTwoPlayers_AssertEqualTrue() {
 
         Player player = getFirstPlayer();
-        ArrayList<Frame> frames = scoreMapServiceImp.getScoreFrameByPlayer(player, filteredScore);
+        ArrayList<Frame> frames = scoreParse.retrieveScorePlayer(player, filteredScore);
         Assert.assertEquals(10, frames.size());
     }
 
     private Set<Player> getPlayerFromScoreLine(){
-        return scoreMapServiceImp.getPlayers(scoreLine);
+        return scoreParse.retrievePlayers(scoreLine);
     }
 
     private  Player getFirstPlayer()
