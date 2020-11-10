@@ -1,6 +1,6 @@
 package com.bowling.tenpinbowling.services;
 
-import com.bowling.tenpinbowling.Enums.SystemConstant;
+import com.bowling.tenpinbowling.enums.SystemConstant;
 import com.bowling.tenpinbowling.interfaces.ScoreFrameCreatorService;
 import com.bowling.tenpinbowling.interfaces.ScoreParseService;
 import com.bowling.tenpinbowling.models.Frame;
@@ -19,32 +19,30 @@ import java.util.stream.Collectors;
 
 
 /**
- * Parse the scores into a Map<{@link Player}, ArrayList<{@link Frame}>>.
+ * Parse the scores into a Map<{@link Player}, List<{@link Frame}>>.
 */
 @Service
 public class ScoreParse implements ScoreParseService {
 
     @Autowired
-    private ScoreFrameCreatorService scoreFrameCreatorService;
+    ScoreFrameCreatorService scoreFrameCreatorService;
 
     @Override
-    public Map<Player, ArrayList<Frame>> buildScoreMap(File bowlingGameInfo) {
+    public Map<Player, List<Frame>> buildScoreMap(File bowlingGameInfo) {
 
-        Map<Player, ArrayList<Frame>>  scoreMap = new HashMap<>();
-        ArrayList<String> bowlingGameInformation;
+        Map<Player, List<Frame>>  scoreMap = new HashMap<>();
+        List<String> bowlingGameInformation;
 
         try
         {
             bowlingGameInformation = parseBowlingGameInfo(bowlingGameInfo);
-
             Set<Player> players = retrievePlayers(bowlingGameInformation);
 
             for (Player player : players)
             {
-                ArrayList<String> scoreGameFilteredByPlayer = getBowlingGameInfoFilteredByPlayer(bowlingGameInformation, player);
+                List<String> scoreGameFilteredByPlayer = getBowlingGameInfoFilteredByPlayer(bowlingGameInformation, player);
 
-                ArrayList<Frame> playerScore = retrieveScorePlayer(player, scoreGameFilteredByPlayer);
-
+                List<Frame> playerScore = retrieveScorePlayer(player, scoreGameFilteredByPlayer);
                 scoreMap.put(player, playerScore);
             }
 
@@ -58,13 +56,12 @@ public class ScoreParse implements ScoreParseService {
     }
 
     @Override
-    public ArrayList<String> parseBowlingGameInfo(File bowlingGameInfo) throws IOException {
+    public List<String> parseBowlingGameInfo(File bowlingGameInfo) throws IOException {
 
-        ArrayList<String> bowlingGameInformation = new ArrayList<>();
+        List<String> bowlingGameInformation = new ArrayList<>();
         BufferedReader bufferedReader;
 
         bufferedReader = new BufferedReader(new FileReader(bowlingGameInfo));
-
         String line;
 
         while ((line = bufferedReader.readLine()) != null)
@@ -76,12 +73,13 @@ public class ScoreParse implements ScoreParseService {
     }
 
     @Override
-    public Set<Player> retrievePlayers(ArrayList<String> bowlingGameInformation) {
+    public Set<Player> retrievePlayers(List<String> bowlingGameInformation) {
 
         Player player;
         Set<Player> players = new HashSet<>();
         Iterator<String> scoreIterator  = bowlingGameInformation.iterator();
         int maxIteration = 3;
+
         do
         {
 
@@ -90,13 +88,10 @@ public class ScoreParse implements ScoreParseService {
             if (isValidScoreLine(scoreLine))
             {
                 String playerName = getPlayerNameFromLine(scoreLine);
-
                 if (isValidPlayerName(playerName))
                 {
                     player = new Player();
-
                     player.setName(playerName);
-
                     players.add(player);
                 }
             }
@@ -113,7 +108,7 @@ public class ScoreParse implements ScoreParseService {
     }
 
     @Override
-    public ArrayList<Frame> retrieveScorePlayer(Player player, ArrayList<String> scoreFilteredByPlayer) {
+    public List<Frame> retrieveScorePlayer(Player player, List<String> scoreFilteredByPlayer) {
         return scoreFrameCreatorService.getScoreFrames(scoreFilteredByPlayer);
     }
 
@@ -141,7 +136,7 @@ public class ScoreParse implements ScoreParseService {
         return !StringUtils.isEmpty(playerName) && !playerName.matches(".*\\d.*");
     }
 
-    private ArrayList<String> getBowlingGameInfoFilteredByPlayer(ArrayList<String> bowlingGameInformation, Player player){
+    private List<String> getBowlingGameInfoFilteredByPlayer(List<String> bowlingGameInformation, Player player){
 
        return bowlingGameInformation
                 .stream()

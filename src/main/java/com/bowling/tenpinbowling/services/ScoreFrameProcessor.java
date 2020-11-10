@@ -1,21 +1,16 @@
 package com.bowling.tenpinbowling.services;
 
 
-import com.bowling.tenpinbowling.Enums.SystemConstant;
+import com.bowling.tenpinbowling.enums.SystemConstant;
 import com.bowling.tenpinbowling.interfaces.ProcessorStrategy;
 import com.bowling.tenpinbowling.interfaces.ScoreFrameProcessorService;
-import com.bowling.tenpinbowling.interfaces.ScoreParseService;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ListIterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Calculate Frame score.
@@ -40,27 +35,25 @@ public class ScoreFrameProcessor implements ScoreFrameProcessorService {
     private ProcessorStrategy tenthFrameProcessor;
 
     @Override
-    public Map<Player, ArrayList<Frame>> calculateFrameScore(Map<Player, ArrayList<Frame>> scoreMap) {
+    public Map<Player, List<Frame>> calculateFrameScore(Map<Player, List<Frame>> scoreMap) {
 
-        Map<Player, ArrayList<Frame>> calculatedFrames = new HashMap<>();
+        Map<Player, List<Frame>> calculatedFrames = new HashMap<>();
 
         for (Player player : scoreMap.keySet())
         {
-            ArrayList<Frame> frames = scoreMap.get(player);
-
-            ArrayList<Frame> calculateFrameScore = calculateFrameScore(frames);
-
+            List<Frame> frames = scoreMap.get(player);
+            List<Frame> calculateFrameScore = calculateFrameScore(frames);
             calculatedFrames.put(player, calculateFrameScore);
         }
 
         return calculatedFrames;
     }
 
-    private ArrayList<Frame> calculateFrameScore(ArrayList<Frame> frames) {
+    private List<Frame> calculateFrameScore(List<Frame> frames) {
 
-        ArrayList<Frame> scoredFrame = new ArrayList<>();
+        List<Frame> scoredFrame = new ArrayList<>();
         ListIterator<Frame> framesIterator = frames.listIterator();
-        ArrayList<Frame> shallowFrameCopy = new ArrayList<>(frames);
+        List<Frame> shallowFrameCopy = new ArrayList<>(frames);
         int scoredCalculated = 0;
 
         do

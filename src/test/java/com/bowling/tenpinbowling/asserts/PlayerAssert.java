@@ -1,4 +1,4 @@
-package com.bowling.tenpinbowling.Assert;
+package com.bowling.tenpinbowling.asserts;
 
 import com.bowling.tenpinbowling.models.Player;
 import org.assertj.core.api.AbstractAssert;

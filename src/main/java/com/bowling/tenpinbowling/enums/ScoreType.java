@@ -1,4 +1,4 @@
-package com.bowling.tenpinbowling.Enums;
+package com.bowling.tenpinbowling.enums;
 
 public enum ScoreType {
 

@@ -1,4 +1,4 @@
-package com.bowling.tenpinbowling.Integration;
+package com.bowling.tenpinbowling.integrations;
 
 
 import com.bowling.tenpinbowling.models.Frame;
@@ -22,11 +22,11 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
-import static com.bowling.tenpinbowling.Assert.Assertions.assertThat;
+import static com.bowling.tenpinbowling.asserts.Assertions.assertThat;
 
 
 @SpringBootTest(classes = {ScoreParse.class, ScoreFrameCreator.class, ScoreFrameProcessor.class, NormalScoreProcessor.class, SpareScoreProcessor.class, StrikeScoreProcessor.class, TenthFrameProcessor.class})
@@ -70,15 +70,15 @@ public class ScoreFrameProcessorTest {
 
     private void assertFrameScoreProcessorResult(File gameScoreFile, int expectedFinalScore)
     {
-        Map<Player, ArrayList<Frame>> gameScoreMap = retrieveFirstPlayer(buildScoreMap(gameScoreFile));
+        Map<Player, List<Frame>> gameScoreMap = retrieveFirstPlayer(buildScoreMap(gameScoreFile));
 
         Player player = gameScoreMap.keySet().stream().findFirst().get();
         assertThat(player).hasName("Carl");
 
-        ArrayList<Frame>  frameScore = gameScoreMap.get(player);
+        List<Frame>  frameScore = gameScoreMap.get(player);
         Assert.assertEquals(frameScore.size(), 10);
 
-        Map<Player, ArrayList<Frame>> calculatedFrameScore = scoreFrameProcessor.calculateFrameScore(gameScoreMap);
+        Map<Player, List<Frame>> calculatedFrameScore = scoreFrameProcessor.calculateFrameScore(gameScoreMap);
 
 
         Frame lastFrame = calculatedFrameScore.get(player).stream().reduce((oldFrame, newFrame) -> newFrame).get();
@@ -87,16 +87,16 @@ public class ScoreFrameProcessorTest {
 
     }
 
-    private Map<Player, ArrayList<Frame>> buildScoreMap(File gameScore){
+    private Map<Player, List<Frame>> buildScoreMap(File gameScore){
 
-        Map<Player, ArrayList<Frame>>  scoreMap = scoreParse.buildScoreMap(gameScore);
+        Map<Player, List<Frame>>  scoreMap = scoreParse.buildScoreMap(gameScore);
         assert scoreMap.size() >= 1 : "Scores were not parse correctly, scoreParse.buildScoreMap()";
         return scoreMap;
     }
 
-    private Map<Player, ArrayList<Frame>> retrieveFirstPlayer(Map<Player, ArrayList<Frame>> gameScoreMap)
+    private Map<Player, List<Frame>> retrieveFirstPlayer(Map<Player, List<Frame>> gameScoreMap)
     {
-        Map.Entry<Player, ArrayList<Frame>> firstPlayerInfo = gameScoreMap.entrySet()
+        Map.Entry<Player, List<Frame>> firstPlayerInfo = gameScoreMap.entrySet()
                 .stream()
                 .findFirst()
                 .get();

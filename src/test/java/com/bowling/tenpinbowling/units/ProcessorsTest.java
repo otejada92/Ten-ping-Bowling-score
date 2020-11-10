@@ -1,11 +1,11 @@
-package com.bowling.tenpinbowling.Unit;
+package com.bowling.tenpinbowling.units;
 
 
 import com.bowling.tenpinbowling.scoreprocessors.NormalScoreProcessor;
 import com.bowling.tenpinbowling.scoreprocessors.SpareScoreProcessor;
 import com.bowling.tenpinbowling.scoreprocessors.StrikeScoreProcessor;
 import com.bowling.tenpinbowling.scoreprocessors.TenthFrameProcessor;
-import com.bowling.tenpinbowling.Enums.ScoreType;
+import com.bowling.tenpinbowling.enums.ScoreType;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Roll;
 import org.junit.Assert;

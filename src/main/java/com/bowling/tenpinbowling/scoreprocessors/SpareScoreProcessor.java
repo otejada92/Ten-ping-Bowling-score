@@ -15,11 +15,7 @@ public class SpareScoreProcessor extends ScoreProcessor {
     @Qualifier("normalScoreProcessor")
     private ProcessorStrategy normalScoreProcessor;
 
-    @Autowired
-    @Qualifier(value = "strikeScoreProcessor")
-    private ProcessorStrategy strikeScoreProcessor;
-
-    private SpareScoreProcessor() {
+    SpareScoreProcessor() {
         super();
     }
 
@@ -30,19 +26,7 @@ public class SpareScoreProcessor extends ScoreProcessor {
         Frame nextFrame  = pendingFrames[0];
         int extraPoint;
 
-        switch (nextFrame.getFrameScoreType())
-        {
-            case STRIKE:
-            {
-                strikeScoreProcessor.calculateScore(unProcessedFrame, pendingFrames);
-            }
-            default:
-            {
-                extraPoint = parseRollScoreToInteger(nextFrame.getFirstRoll().getScore());
-                break;
-            }
-        }
-
+        extraPoint = parseRollScoreToInteger(nextFrame.getFirstRoll().getScore());
         return Integer.sum(unProcessedFrameScore, extraPoint);
 
     }

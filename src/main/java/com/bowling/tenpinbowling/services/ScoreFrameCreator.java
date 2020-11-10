@@ -1,14 +1,15 @@
 package com.bowling.tenpinbowling.services;
 
-import com.bowling.tenpinbowling.Enums.SystemConstant;
+import com.bowling.tenpinbowling.enums.SystemConstant;
 import com.bowling.tenpinbowling.interfaces.ScoreFrameCreatorService;
-import com.bowling.tenpinbowling.Enums.ScoreType;
+import com.bowling.tenpinbowling.enums.ScoreType;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Roll;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Build Frames base score.
@@ -17,9 +18,9 @@ import java.util.Iterator;
 public class ScoreFrameCreator implements ScoreFrameCreatorService {
 
     @Override
-    public ArrayList<Frame> getScoreFrames(ArrayList<String> bowlingGameInformationByPlayerName) {
+    public List<Frame> getScoreFrames(List<String> bowlingGameInformationByPlayerName) {
 
-        ArrayList<Frame> frames = new ArrayList<>();
+        List<Frame> frames = new ArrayList<>();
 
         Iterator<String> scoreIterator = bowlingGameInformationByPlayerName.iterator();
         int frameRound = 1;
@@ -27,11 +28,9 @@ public class ScoreFrameCreator implements ScoreFrameCreatorService {
         while(frameRound <= SystemConstant.LAST_ROUND_ID.getValue() && scoreIterator.hasNext())
         {
             Frame.Builder frameBuilder = new Frame.Builder();
-
             frameBuilder.round(frameRound);
 
             buildFrameScoreBuilder(scoreIterator, frameBuilder);
-
             frames.add(frameBuilder.build());
             frameRound++;
 
@@ -43,11 +42,9 @@ public class ScoreFrameCreator implements ScoreFrameCreatorService {
     public void buildFrameScoreBuilder(Iterator<String> scoreIterator, Frame.Builder frameBuilder) {
 
         String firstRollScore = scoreIterator.next();
-
         Roll firstRoll = buildRollFrame(firstRollScore, "0");
 
         frameBuilder.firstRoll(firstRoll).build();
-
         addNextScoresIntoFrame(scoreIterator, frameBuilder);
 
         addFrameType(frameBuilder);
@@ -97,7 +94,6 @@ public class ScoreFrameCreator implements ScoreFrameCreatorService {
         ScoreType secondRollType = builder.getSecondRoll() == null ? null : builder.getSecondRoll().getRollType();
 
         frameScoreType = getScoreType(firstRollType, secondRollType);
-
         builder.frameScoreType(frameScoreType);
     }
 
@@ -106,11 +102,17 @@ public class ScoreFrameCreator implements ScoreFrameCreatorService {
         ScoreType frameScoreType;
 
         if (firstRollType == ScoreType.STRIKE)
+        {
             frameScoreType = ScoreType.STRIKE;
+        }
         else if (secondRollType == ScoreType.SPARE)
+        {
             frameScoreType = ScoreType.SPARE;
+        }
         else
+        {
             frameScoreType = ScoreType.NORMAL;
+        }
 
         return  frameScoreType;
     }
@@ -124,39 +126,50 @@ public class ScoreFrameCreator implements ScoreFrameCreatorService {
         ScoreType scoreType;
 
         if(isFoulRoll(rollScore))
+        {
             scoreType = ScoreType.FOUL;
+        }
         else if(notPingKnocked(rollScore))
+        {
             scoreType = ScoreType.NO_PINGS_KNOCKED;
+        }
         else if(isStrikeRoll(rollScore) || isSpareRoll)
+        {
             scoreType = (isPreviousRollFoul || isSpareRoll) ? ScoreType.SPARE : ScoreType.STRIKE;
+        }
         else
-            scoreType =  ScoreType.NORMAL;
+        {
+            scoreType = ScoreType.NORMAL;
+        }
 
         return  scoreType;
     }
 
     private boolean isStrikeRoll(String rollScore){
-        return rollScore.equals("10");
+        return "10".equals(rollScore);
     }
 
     private boolean isSpareRoll(String firstRollScore, String secondRollScore){
 
         if (isNormalRoll(firstRollScore) && isNormalRoll(secondRollScore))
+        {
             return Integer.parseInt(firstRollScore) + Integer.parseInt(secondRollScore) == 10;
-        else return isFoulRoll(firstRollScore) && isStrikeRoll(secondRollScore);
+        }
+
+        return isFoulRoll(firstRollScore) && isStrikeRoll(secondRollScore);
 
     }
 
     private boolean isNormalRoll(String rollScore){
-        return  rollScore.matches("[0-9]");
+        return rollScore.matches("[0-9]");
     }
 
     private boolean isFoulRoll(String rollScore) {
-        return  rollScore.toLowerCase().equals("f");
+        return "f".equals(rollScore.toLowerCase());
     }
 
     private boolean notPingKnocked(String rollScore) {
-        return rollScore.toLowerCase().equals("0");
+        return "0".equals(rollScore.toLowerCase());
     }
 }
 
