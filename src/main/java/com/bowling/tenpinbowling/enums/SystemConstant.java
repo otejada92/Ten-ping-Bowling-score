@@ -1,4 +1,4 @@
-package com.bowling.tenpinbowling.Enums;
+package com.bowling.tenpinbowling.enums;
 
 /**
  * Hold constant that ten pin bowling program uses.

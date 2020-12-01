@@ -1,6 +1,6 @@
-package com.bowling.tenpinbowling.Unit;
+package com.bowling.tenpinbowling.units;
 
-import com.bowling.tenpinbowling.Enums.ScoreType;
+import com.bowling.tenpinbowling.enums.ScoreType;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Roll;
 import com.bowling.tenpinbowling.services.ScoreFrameCreator;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import java.util.ArrayList;
+import java.util.List;
 
 
 @SpringBootTest(classes = {com.bowling.tenpinbowling.services.ScoreFrameCreator.class})
@@ -22,10 +22,10 @@ public class ScoreFrameCreatorTest {
 
 
     @Value("${normal.score}")
-    private ArrayList<String> filteredScore;
+    private List<String> filteredScore;
 
     @Value("${normal.frame.score.data}")
-    private ArrayList<String> frameScore;
+    private List<String> frameScore;
 
     @Autowired
     private ScoreFrameCreator scoreFrameCreator;
@@ -34,7 +34,7 @@ public class ScoreFrameCreatorTest {
     @Test
     public void getScoreFrames_TenValidFrameScore_ReturnTrue(){
 
-        ArrayList<Frame> frames = scoreFrameCreator.getScoreFrames(filteredScore);
+        List<Frame> frames = scoreFrameCreator.getScoreFrames(filteredScore);
         Assert.assertEquals(10, frames.size());
     }
 

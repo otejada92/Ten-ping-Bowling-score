@@ -1,6 +1,6 @@
 package com.bowling.tenpinbowling.services;
 
-import com.bowling.tenpinbowling.Enums.SystemConstant;
+import com.bowling.tenpinbowling.enums.SystemConstant;
 import com.bowling.tenpinbowling.interfaces.BowlingBoardService;
 import com.bowling.tenpinbowling.interfaces.ScoreFrameProcessorService;
 import com.bowling.tenpinbowling.interfaces.ScoreParseService;
@@ -22,30 +22,29 @@ import java.util.stream.Collectors;
 public class BowlingBoardPrinter implements BowlingBoardService {
 
     @Autowired
-    private ScoreFrameProcessorService scoreFrameProcessorService;
+    ScoreFrameProcessorService scoreFrameProcessorService;
 
     @Autowired
     ScoreParseService scoreParseService;
 
     private String format = "%10s %10s %10s %10s %10s %10s %10s %10s %10s %10s \n";
 
-    @Value("${file.path}")
+    @Value("${file.path}") // delete this
     private String filePath;
 
     @Override
     public void viewBowlingBoardResult() {
 
-
         try
         {
             File file = new File(filePath);
 
-            Map<Player, ArrayList<Frame>> scoreMap = scoreParseService.buildScoreMap(file);
+            Map<Player, List<Frame>> scoreMap = scoreParseService.buildScoreMap(file);
 
-            Map<Player, ArrayList<Frame>> frameScoreResult = scoreFrameProcessorService.calculateFrameScore(scoreMap);
+            Map<Player, List<Frame>> frameScoreResult = scoreFrameProcessorService.calculateFrameScore(scoreMap);
 
             for (Player player : frameScoreResult.keySet()) {
-                ArrayList<Frame> framesInfo = frameScoreResult.get(player);
+                List<Frame> framesInfo = frameScoreResult.get(player);
 
                 showFrameRoundLane(framesInfo);
                 showPlayerLaneInfo(player);
@@ -55,11 +54,11 @@ public class BowlingBoardPrinter implements BowlingBoardService {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            e.printStackTrace(); // remove this
         }
     }
 
-    private void showFrameRoundLane(ArrayList<Frame> framesInfo) {
+    private void showFrameRoundLane(List<Frame> framesInfo) {
 
         String frameRound = framesInfo.stream().map(Frame::getRound)
                 .map(Objects::toString)
@@ -73,12 +72,12 @@ public class BowlingBoardPrinter implements BowlingBoardService {
         System.out.println(player.getName());
     }
 
-    private void showPinFallsLane(ArrayList<Frame> framesInfo) {
+    private void showPinFallsLane(List<Frame> framesInfo) {
 
         String pinFallsLaneValue = framesInfo.stream().map(this::getPinFallInfo)
                 .map(Objects::toString).collect(Collectors.joining(" "));
 
-        System.out.print("Pinfalls: ");
+        System.out.print("Pin falls: ");
         System.out.printf(format, (Object[]) pinFallsLaneValue.split(","));
     }
 
@@ -98,7 +97,7 @@ public class BowlingBoardPrinter implements BowlingBoardService {
 
     }
 
-    private void showScoreLane(ArrayList<Frame> framesInfo) {
+    private void showScoreLane(List<Frame> framesInfo) {
 
         String scores = framesInfo.stream().map(Frame::getFrameFinalScore).map(Objects::toString).collect(Collectors.joining(" "));
         System.out.print("Score: ");
@@ -108,7 +107,7 @@ public class BowlingBoardPrinter implements BowlingBoardService {
     private String parseRollScoreForBoard(Roll... rollsArray)
     {
         StringJoiner value = new StringJoiner(" ");
-        ArrayList<Roll> rolls = new ArrayList<>(Arrays.asList(rollsArray));
+        List<Roll> rolls = new ArrayList<>(Arrays.asList(rollsArray));
 
         for (Roll roll : rolls)
         {

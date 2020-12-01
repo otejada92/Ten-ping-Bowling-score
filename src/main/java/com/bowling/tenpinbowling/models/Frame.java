@@ -1,6 +1,6 @@
 package com.bowling.tenpinbowling.models;
 
-import com.bowling.tenpinbowling.Enums.ScoreType;
+import com.bowling.tenpinbowling.enums.ScoreType;
 
 import java.util.Objects;
 
@@ -15,7 +15,6 @@ public class Frame {
     private Roll firstRoll;
     private Roll secondRoll;
     private Roll thirdRoll;
-    private int bonusByScoreType;
     private int frameFinalScore;
 
     private ScoreType frameScoreType;
@@ -25,7 +24,6 @@ public class Frame {
         this.firstRoll = builder.firstRoll;
         this.secondRoll = builder.secondRoll;
         this.thirdRoll = builder.thirdRoll;
-        this.bonusByScoreType = builder.bonusByScoreType;
         this.frameFinalScore = builder.frameFinalScore;
         this.frameScoreType = builder.frameScoreType;
     }
@@ -71,14 +69,6 @@ public class Frame {
         return frameScoreType;
     }
 
-    public int getBonusByScoreType() {
-        return bonusByScoreType;
-    }
-
-    public void setBonusByScoreType(int bonusByScoreType) {
-        this.bonusByScoreType = bonusByScoreType;
-    }
-
     public static class Builder {
 
         int round;
@@ -86,7 +76,6 @@ public class Frame {
         Roll firstRoll;
         Roll secondRoll;
         Roll thirdRoll;
-        int bonusByScoreType;
         int frameFinalScore;
 
         ScoreType frameScoreType;

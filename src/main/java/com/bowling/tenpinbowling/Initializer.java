@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 
 @SpringBootApplication
 @PropertySource(value = "classpath:application-prod.properties")
-
 public class Initializer implements ApplicationRunner {
 
     @Autowired

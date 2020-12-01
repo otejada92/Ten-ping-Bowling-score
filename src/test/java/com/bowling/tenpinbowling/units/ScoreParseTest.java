@@ -1,4 +1,4 @@
-package com.bowling.tenpinbowling.Unit;
+package com.bowling.tenpinbowling.units;
 
 
 import com.bowling.tenpinbowling.models.Frame;
@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootTest(classes = {ScoreParse.class, ScoreFrameCreator.class})
@@ -27,14 +28,11 @@ import java.util.Set;
 public class ScoreParseTest {
 
     @Autowired
-    private ScoreParse scoreParse;
-
-    private ArrayList<String> scoreLine;
-
-    private URL normalScore;
+    ScoreParse scoreParse;
+    private List <String> scoreLine;
 
     @Value("${normal.score}")
-    private ArrayList<String> filteredScore;
+    ArrayList<String> filteredScore;
 
     @Before
     public void setUp() throws IOException {
@@ -54,7 +52,7 @@ public class ScoreParseTest {
     public void  retrieveScorePlayer_NormalGameTwoPlayers_AssertEqualTrue() {
 
         Player player = getFirstPlayer();
-        ArrayList<Frame> frames = scoreParse.retrieveScorePlayer(player, filteredScore);
+        List<Frame> frames = scoreParse.retrieveScorePlayer(player, filteredScore);
         Assert.assertEquals(10, frames.size());
     }
 
@@ -65,7 +63,7 @@ public class ScoreParseTest {
     private  Player getFirstPlayer()
     {
         Set<Player> players = getPlayerFromScoreLine();
-        assert players.size() > 0 : "No players found, getFirstPlayer()";
+        assert players.isEmpty() : "No players found, getFirstPlayer()";
         return players.stream().findFirst().get();
     }
 
