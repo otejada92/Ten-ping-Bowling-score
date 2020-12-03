@@ -9,7 +9,7 @@ public enum ScoreType {
     NO_PINGS_KNOCKED("no pings knocked"),
     NONE("none");
 
-    private  String value;
+    private final String value;
 
     ScoreType(String value) {
         this.value = value;

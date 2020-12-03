@@ -4,7 +4,6 @@ import java.util.Objects;
 
 /**
  * This is a model class to hold Player information
- *
  */
 public class Player {
 

@@ -7,8 +7,9 @@ import com.bowling.tenpinbowling.interfaces.ScoreParseService;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
 import com.bowling.tenpinbowling.models.Roll;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -21,41 +22,33 @@ import java.util.stream.Collectors;
 @Service
 public class BowlingBoardPrinter implements BowlingBoardService {
 
+    private static final Logger logger = LogManager.getLogger(BowlingBoardPrinter.class);
+    private final String LOG_FORMAT = "{} {} {} {}s {} {} {} {} {} {} \n";
+
     @Autowired
     ScoreFrameProcessorService scoreFrameProcessorService;
 
     @Autowired
     ScoreParseService scoreParseService;
 
-    private String format = "%10s %10s %10s %10s %10s %10s %10s %10s %10s %10s \n";
-
-    @Value("${file.path}") // delete this
-    private String filePath;
-
     @Override
     public void viewBowlingBoardResult() {
 
-        try
-        {
-            File file = new File(filePath);
+        File file = new File("cvbcvbcvb");
 
-            Map<Player, List<Frame>> scoreMap = scoreParseService.buildScoreMap(file);
+        Map<Player, List<Frame>> scoreMap = scoreParseService.buildScoreMap(file);
 
-            Map<Player, List<Frame>> frameScoreResult = scoreFrameProcessorService.calculateFrameScore(scoreMap);
+        Map<Player, List<Frame>> frameScoreResult = scoreFrameProcessorService.calculateFrameScore(scoreMap);
 
-            for (Player player : frameScoreResult.keySet()) {
-                List<Frame> framesInfo = frameScoreResult.get(player);
+        for (Player player : frameScoreResult.keySet()) {
+            List<Frame> framesInfo = frameScoreResult.get(player);
 
-                showFrameRoundLane(framesInfo);
-                showPlayerLaneInfo(player);
-                showPinFallsLane(framesInfo);
-                showScoreLane(framesInfo);
-            }
+            showFrameRoundLane(framesInfo);
+            showPlayerLaneInfo(player);
+            showPinFallsLane(framesInfo);
+            showScoreLane(framesInfo);
         }
-        catch (Exception e)
-        {
-            e.printStackTrace(); // remove this
-        }
+
     }
 
     private void showFrameRoundLane(List<Frame> framesInfo) {
@@ -64,8 +57,8 @@ public class BowlingBoardPrinter implements BowlingBoardService {
                 .map(Objects::toString)
                 .collect(Collectors.joining(" "));
 
-        System.out.print("Frame: ");
-        System.out.printf(format, (Object[]) frameRound.split(" "));
+        logger.info("Frames: ");
+        logger.info(LOG_FORMAT, (Object[]) frameRound.split(" "));
     }
 
     private void showPlayerLaneInfo(Player player) {
@@ -77,19 +70,16 @@ public class BowlingBoardPrinter implements BowlingBoardService {
         String pinFallsLaneValue = framesInfo.stream().map(this::getPinFallInfo)
                 .map(Objects::toString).collect(Collectors.joining(" "));
 
-        System.out.print("Pin falls: ");
-        System.out.printf(format, (Object[]) pinFallsLaneValue.split(","));
+        logger.info("Pin falls: ");
+        logger.info(LOG_FORMAT, (Object[]) pinFallsLaneValue.split(","));
     }
 
-    private String getPinFallInfo(Frame frame){
+    private String getPinFallInfo(Frame frame) {
 
         String value;
-        if (frame.getRound() != SystemConstant.LAST_ROUND_ID.getValue())
-        {
+        if (frame.getRound() != SystemConstant.LAST_ROUND_ID.getValue()) {
             value = parseRollScoreForBoard(frame.getFirstRoll(), frame.getSecondRoll());
-        }
-        else
-        {
+        } else {
             value = parseRollScoreForBoard(frame.getFirstRoll(), frame.getSecondRoll(), frame.getThirdRoll());
         }
 
@@ -100,19 +90,16 @@ public class BowlingBoardPrinter implements BowlingBoardService {
     private void showScoreLane(List<Frame> framesInfo) {
 
         String scores = framesInfo.stream().map(Frame::getFrameFinalScore).map(Objects::toString).collect(Collectors.joining(" "));
-        System.out.print("Score: ");
-        System.out.format(format, (Object[]) scores.split(" "));
+        logger.info("Score: ");
+        logger.info(LOG_FORMAT, (Object[]) scores.split(" "));
     }
 
-    private String parseRollScoreForBoard(Roll... rollsArray)
-    {
+    private String parseRollScoreForBoard(Roll... rollsArray) {
         StringJoiner value = new StringJoiner(" ");
         List<Roll> rolls = new ArrayList<>(Arrays.asList(rollsArray));
 
-        for (Roll roll : rolls)
-        {
-            switch (roll.getRollType())
-            {
+        for (Roll roll : rolls) {
+            switch (roll.getRollType()) {
                 case STRIKE:
                     value.add("X");
                     break;
@@ -132,6 +119,7 @@ public class BowlingBoardPrinter implements BowlingBoardService {
                     break;
             }
         }
+
         value.add(",");
         return value.toString();
     }

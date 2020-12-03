@@ -7,17 +7,16 @@ import java.util.Objects;
 
 /**
  * This is a model class to hold Frame information
- *
  */
 public class Frame {
 
-    private int round;
-    private Roll firstRoll;
-    private Roll secondRoll;
-    private Roll thirdRoll;
+    private final int round;
+    private final Roll firstRoll;
+    private final Roll secondRoll;
+    private final Roll thirdRoll;
     private int frameFinalScore;
 
-    private ScoreType frameScoreType;
+    private final ScoreType frameScoreType;
 
     private Frame(Builder builder) {
         this.round = builder.round;
@@ -80,7 +79,8 @@ public class Frame {
 
         ScoreType frameScoreType;
 
-        public  Builder(){}
+        public Builder() {
+        }
 
         public Roll getFirstRoll() {
             return firstRoll;
@@ -94,14 +94,37 @@ public class Frame {
             return frameScoreType;
         }
 
-        public int getRound(){return  round;}
+        public int getRound() {
+            return round;
+        }
 
-        public Builder round(int round){this.round = round; return  this;}
-        public Builder firstRoll(Roll firstRoll){this.firstRoll = firstRoll; return  this;}
-        public Builder secondRoll(Roll secondRoll){this.secondRoll = secondRoll; return  this;}
-        public Builder thirdRoll(Roll thirdRoll){this.thirdRoll = thirdRoll; return  this;}
-        public Builder frameScoreType(ScoreType frameScoreType){this.frameScoreType = frameScoreType; return  this;}
+        public Builder round(int round) {
+            this.round = round;
+            return this;
+        }
 
-        public Frame build(){return new Frame(this);}
+        public Builder firstRoll(Roll firstRoll) {
+            this.firstRoll = firstRoll;
+            return this;
+        }
+
+        public Builder secondRoll(Roll secondRoll) {
+            this.secondRoll = secondRoll;
+            return this;
+        }
+
+        public Builder thirdRoll(Roll thirdRoll) {
+            this.thirdRoll = thirdRoll;
+            return this;
+        }
+
+        public Builder frameScoreType(ScoreType frameScoreType) {
+            this.frameScoreType = frameScoreType;
+            return this;
+        }
+
+        public Frame build() {
+            return new Frame(this);
+        }
     }
 }

@@ -10,10 +10,12 @@ import java.util.Map;
 import java.util.Set;
 
 
-public interface ScoreParseService
-{
+public interface ScoreParseService {
     Map<Player, List<Frame>> buildScoreMap(File bowlingFrameScore);
+
     Set<Player> retrievePlayers(List<String> scoreLine);
+
     List<Frame> retrieveScorePlayer(Player player, List<String> scoreFilteredByPlayers);
+
     List<String> parseBowlingGameInfo(File bowlingFrameScore) throws IOException;
 }

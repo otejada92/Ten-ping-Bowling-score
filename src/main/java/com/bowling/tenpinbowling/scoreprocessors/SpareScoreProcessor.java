@@ -23,7 +23,7 @@ public class SpareScoreProcessor extends ScoreProcessor {
     public int calculateScore(Frame unProcessedFrame, Frame... pendingFrames) {
 
         int unProcessedFrameScore = normalScoreProcessor.calculateScore(unProcessedFrame);
-        Frame nextFrame  = pendingFrames[0];
+        Frame nextFrame = pendingFrames[0];
         int extraPoint;
 
         extraPoint = parseRollScoreToInteger(nextFrame.getFirstRoll().getScore());

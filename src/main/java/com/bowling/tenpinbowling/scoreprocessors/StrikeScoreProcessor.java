@@ -1,13 +1,14 @@
 package com.bowling.tenpinbowling.scoreprocessors;
 
+import com.bowling.tenpinbowling.enums.ScoreType;
 import com.bowling.tenpinbowling.interfaces.ProcessorStrategy;
 import com.bowling.tenpinbowling.models.Frame;
-import com.bowling.tenpinbowling.enums.ScoreType;
 import com.bowling.tenpinbowling.scoreprocessors.common.ScoreProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -23,27 +24,24 @@ public class StrikeScoreProcessor extends ScoreProcessor {
 
         int scoreCalculated;
         int unProcessedFrameScore = normalScoreProcessor.calculateScore(unProcessedFrame);
-        Frame frameAfterFrameToCalculate = pendingFrames[0];
+        Frame frameAfterFrameToCalculate = Objects.requireNonNull(pendingFrames)[0];
 
-        if (frameAfterFrameToCalculate.getFrameScoreType() == ScoreType.STRIKE)
-        {
+        if (frameAfterFrameToCalculate != null &&
+                frameAfterFrameToCalculate.getFrameScoreType() == ScoreType.STRIKE) {
             int scoreSecondStrike = normalScoreProcessor.calculateScore(frameAfterFrameToCalculate);
-            int  extraScore = 0;
+            int extraScore = 0;
 
             Frame frameAfterSecondStrike = pendingFrames[(pendingFrames.length > 1) ? 1 : 0];
 
-            if ((pendingFrames.length > 1) )
-            {
+            if ((pendingFrames.length > 1)) {
                 extraScore = parseRollScoreToInteger(frameAfterSecondStrike.getFirstRoll().getScore());
             }
             scoreCalculated = Stream.of(unProcessedFrameScore, scoreSecondStrike, extraScore).mapToInt(Integer::intValue).sum();
 
-        }
-        else
-        {
+        } else {
             scoreCalculated = Integer.sum(normalScoreProcessor.calculateScore(frameAfterFrameToCalculate), unProcessedFrameScore);
         }
 
-        return  scoreCalculated;
+        return scoreCalculated;
     }
 }

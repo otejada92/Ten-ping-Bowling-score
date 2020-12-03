@@ -34,13 +34,15 @@ public class ScoreFrameProcessor implements ScoreFrameProcessorService {
     @Qualifier(value = "tenthFrameProcessor")
     private ProcessorStrategy tenthFrameProcessor;
 
+    public ScoreFrameProcessor() {
+    }
+
     @Override
     public Map<Player, List<Frame>> calculateFrameScore(Map<Player, List<Frame>> scoreMap) {
 
         Map<Player, List<Frame>> calculatedFrames = new HashMap<>();
 
-        for (Player player : scoreMap.keySet())
-        {
+        for (Player player : scoreMap.keySet()) {
             List<Frame> frames = scoreMap.get(player);
             List<Frame> calculateFrameScore = calculateFrameScore(frames);
             calculatedFrames.put(player, calculateFrameScore);
@@ -56,44 +58,36 @@ public class ScoreFrameProcessor implements ScoreFrameProcessorService {
         List<Frame> shallowFrameCopy = new ArrayList<>(frames);
         int scoredCalculated = 0;
 
-        do
-        {
+        do {
             Frame currentFrame = framesIterator.next();
             shallowFrameCopy.remove(currentFrame);
 
-            if (currentFrame.getRound() != SystemConstant.LAST_ROUND_ID.getValue())
-            {
-                switch (currentFrame.getFrameScoreType())
-                {
-                    case STRIKE:
-                    {
+            if (currentFrame.getRound() != SystemConstant.LAST_ROUND_ID.getValue()) {
+                switch (currentFrame.getFrameScoreType()) {
+                    case STRIKE: {
                         Frame[] pendingFrames = shallowFrameCopy.toArray(new Frame[0]);
                         scoredCalculated += strikeScoreProcessor.calculateScore(currentFrame, pendingFrames);
                         break;
                     }
-                    case SPARE:
-                    {
+                    case SPARE: {
                         scoredCalculated += spareScoreProcessor.calculateScore(currentFrame, framesIterator.next());
                         framesIterator.previous();
                         break;
                     }
-                    default:
-                    {
+                    default: {
                         scoredCalculated += normalScoreProcessor.calculateScore(currentFrame);
                         break;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 scoredCalculated += tenthFrameProcessor.calculateScore(currentFrame);
             }
 
             currentFrame.setFrameFinalScore(scoredCalculated);
             scoredFrame.add(currentFrame);
-        }while (framesIterator.hasNext());
+        } while (framesIterator.hasNext());
 
-        return  scoredFrame;
+        return scoredFrame;
     }
 
 

@@ -1,4 +1,4 @@
-# Ten-ping-Bowling-score
+# Ten ping bowling score
 
 ## About
 
