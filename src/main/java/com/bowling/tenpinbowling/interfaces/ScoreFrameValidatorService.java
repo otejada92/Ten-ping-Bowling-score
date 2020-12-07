@@ -6,7 +6,14 @@ import com.bowling.tenpinbowling.models.Player;
 import java.util.List;
 import java.util.Map;
 
-public interface ScoreFrameProcessorService {
+public interface ScoreFrameValidatorService {
 
-    Map<Player, List<Frame>> calculateFrameScore(Map<Player, List<Frame>> scores);
+    boolean validateFrameScores(Map<Player, List<String>> score);
+
+    boolean expected();
+
+    boolean greater();
+
+    boolean less();
+
 }

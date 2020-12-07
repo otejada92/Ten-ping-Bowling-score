@@ -118,7 +118,7 @@ public class ScoreFrameCreator implements ScoreFrameCreatorService {
 
         if (isFoulRoll(rollScore)) {
             scoreType = ScoreType.FOUL;
-        } else if (notPingKnocked(rollScore)) {
+        } else if (noPingKnocked(rollScore)) {
             scoreType = ScoreType.NO_PINGS_KNOCKED;
         } else if (isStrikeRoll(rollScore) || isSpareRoll) {
             scoreType = (isPreviousRollFoul || isSpareRoll) ? ScoreType.SPARE : ScoreType.STRIKE;
@@ -151,7 +151,7 @@ public class ScoreFrameCreator implements ScoreFrameCreatorService {
         return "f".equals(rollScore.toLowerCase());
     }
 
-    private boolean notPingKnocked(String rollScore) {
+    private boolean noPingKnocked(String rollScore) {
         return "0".equals(rollScore.toLowerCase());
     }
 }

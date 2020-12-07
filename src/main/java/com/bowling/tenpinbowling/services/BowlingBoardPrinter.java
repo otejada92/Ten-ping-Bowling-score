@@ -2,17 +2,13 @@ package com.bowling.tenpinbowling.services;
 
 import com.bowling.tenpinbowling.enums.SystemConstant;
 import com.bowling.tenpinbowling.interfaces.BowlingBoardService;
-import com.bowling.tenpinbowling.interfaces.ScoreFrameProcessorService;
-import com.bowling.tenpinbowling.interfaces.ScoreParseService;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
 import com.bowling.tenpinbowling.models.Roll;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,30 +21,17 @@ public class BowlingBoardPrinter implements BowlingBoardService {
     private static final Logger logger = LogManager.getLogger(BowlingBoardPrinter.class);
     private final String LOG_FORMAT = "{} {} {} {}s {} {} {} {} {} {} \n";
 
-    @Autowired
-    ScoreFrameProcessorService scoreFrameProcessorService;
-
-    @Autowired
-    ScoreParseService scoreParseService;
-
     @Override
-    public void viewBowlingBoardResult() {
+    public void viewBowlingBoardResult(Map<Player, List<Frame>> frameResult) {
 
-        File file = new File("cvbcvbcvb");
-
-        Map<Player, List<Frame>> scoreMap = scoreParseService.buildScoreMap(file);
-
-        Map<Player, List<Frame>> frameScoreResult = scoreFrameProcessorService.calculateFrameScore(scoreMap);
-
-        for (Player player : frameScoreResult.keySet()) {
-            List<Frame> framesInfo = frameScoreResult.get(player);
+        for (Player player : frameResult.keySet()) {
+            List<Frame> framesInfo = frameResult.get(player);
 
             showFrameRoundLane(framesInfo);
             showPlayerLaneInfo(player);
             showPinFallsLane(framesInfo);
             showScoreLane(framesInfo);
         }
-
     }
 
     private void showFrameRoundLane(List<Frame> framesInfo) {
@@ -62,7 +45,7 @@ public class BowlingBoardPrinter implements BowlingBoardService {
     }
 
     private void showPlayerLaneInfo(Player player) {
-        System.out.println(player.getName());
+        logger.info(player.getName());
     }
 
     private void showPinFallsLane(List<Frame> framesInfo) {
@@ -76,14 +59,10 @@ public class BowlingBoardPrinter implements BowlingBoardService {
 
     private String getPinFallInfo(Frame frame) {
 
-        String value;
         if (frame.getRound() != SystemConstant.LAST_ROUND_ID.getValue()) {
-            value = parseRollScoreForBoard(frame.getFirstRoll(), frame.getSecondRoll());
-        } else {
-            value = parseRollScoreForBoard(frame.getFirstRoll(), frame.getSecondRoll(), frame.getThirdRoll());
+            return parseRollScoreForBoard(frame.getFirstRoll(), frame.getSecondRoll());
         }
-
-        return value;
+        return parseRollScoreForBoard(frame.getFirstRoll(), frame.getSecondRoll(), frame.getThirdRoll());
 
     }
 
