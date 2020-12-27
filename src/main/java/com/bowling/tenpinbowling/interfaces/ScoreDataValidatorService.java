@@ -6,14 +6,14 @@ import com.bowling.tenpinbowling.models.Player;
 import java.util.List;
 import java.util.Map;
 
-public interface ScoreFrameValidatorService {
+public interface ScoreDataValidatorService {
 
-    boolean validateFrameScores(Map<Player, List<String>> score);
+    boolean validateScore(Map<Player, List<Frame>> score);
 
     boolean expected();
 
-    boolean greater();
+    boolean greater(List<String> scores);
 
-    boolean less();
+    boolean less(List<String> scores);
 
 }

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class Initializer implements ApplicationRunner {
     private ScoreFrameProcessorService scoreFrameProcessorService;
 
     @Autowired
-    private ScoreFrameValidatorService scoreFrameValidatorService;
+    private ScoreDataValidatorService scoreFrameValidatorService;
 
     @Autowired
     private ScoreFrameCreatorService scoreFrameCreatorService;
@@ -48,17 +49,24 @@ public class Initializer implements ApplicationRunner {
         if (!existFile(args)) {
             logger.error("Please set --file argument and provide file path.");
         } else {
+            Map<Player, List<Frame>> playerFrames = new HashMap<>();
+
             String filePath = args.getOptionValues("file").get(0);
             File file = new File(filePath);
 
             Map<Player, List<String>> scores = scoreParseService.buildScoreMap(file);
+            for (Player player : scores.keySet()){
+                List<String> playerScore = scores.get(player);
+                List<Frame> frames = scoreFrameCreatorService.getScoreFrames(playerScore);
+                playerFrames.put(player, frames);
+            }
 
-            if (!scoreFrameValidatorService.validateFrameScores(scores)) {
+            if (!scoreFrameValidatorService.validateScore(playerFrames)) {
                 logger.error("Score information is not valid.");
             } else {
-                scoreFrameCreatorService.getScoreFrames();
-//                Map<Player, List<Frame>> frameResult = scoreFrameProcessorService.calculateFrameScore(scores);
-//                bowlingBoardService.viewBowlingBoardResult(frameResult);
+
+                Map<Player, List<Frame>> frameResult = scoreFrameProcessorService.calculateFrameScore(playerFrames);
+                bowlingBoardService.viewBowlingBoardResult(frameResult);
             }
         }
     }

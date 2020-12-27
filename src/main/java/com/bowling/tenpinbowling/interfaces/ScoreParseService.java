@@ -15,5 +15,5 @@ public interface ScoreParseService {
 
     Set<Player> retrievePlayers(List<String> scoreLine);
 
-    List<String> parseBowlingGameInfo(File bowlingFrameScore) throws IOException;
+    List<String> readBowlingGameScore(File bowlingFrameScore) throws IOException;
 }

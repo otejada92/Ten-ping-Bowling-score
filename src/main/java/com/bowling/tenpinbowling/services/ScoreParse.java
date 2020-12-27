@@ -1,13 +1,11 @@
 package com.bowling.tenpinbowling.services;
 
 import com.bowling.tenpinbowling.enums.SystemConstant;
-import com.bowling.tenpinbowling.interfaces.ScoreFrameCreatorService;
 import com.bowling.tenpinbowling.interfaces.ScoreParseService;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -34,11 +32,11 @@ public class ScoreParse implements ScoreParseService {
         Map<Player, List<String>> scoreMap = new HashMap<>();
         List<String> bowlingGameInformation;
 
-        bowlingGameInformation = parseBowlingGameInfo(bowlingGameInfo);
+        bowlingGameInformation = readBowlingGameScore(bowlingGameInfo);
         Set<Player> players = retrievePlayers(bowlingGameInformation);
 
         for (Player player : players) {
-            List<String> scores = getBowlingGameInfo(bowlingGameInformation, player);
+            List<String> scores = groupScorePlayer(bowlingGameInformation, player);
             scoreMap.put(player, scores);
         }
 
@@ -46,7 +44,7 @@ public class ScoreParse implements ScoreParseService {
     }
 
     @Override
-    public List<String> parseBowlingGameInfo(File bowlingGameInfo) {
+    public List<String> readBowlingGameScore(File bowlingGameInfo) {
 
         List<String> bowlingGameInformation = new ArrayList<>();
 
@@ -74,7 +72,6 @@ public class ScoreParse implements ScoreParseService {
         do {
 
             String[] scoreLine = splitScoreLine(scoreIterator.next());
-
             if (isValidScoreLine(scoreLine)) {
                 String playerName = getPlayerNameFromLine(scoreLine);
                 if (isValidPlayerName(playerName)) {
@@ -86,6 +83,7 @@ public class ScoreParse implements ScoreParseService {
                 logger.error("Invalid score line found");
                 break;
             }
+
             maxIteration--;
         } while (scoreIterator.hasNext() && maxIteration > 0);
 
@@ -116,7 +114,7 @@ public class ScoreParse implements ScoreParseService {
         return !StringUtils.isEmpty(playerName) && !playerName.matches(".*\\d.*");
     }
 
-    private List<String> getBowlingGameInfo(List<String> bowlingGameInformation, Player player) {
+    private List<String> groupScorePlayer(List<String> bowlingGameInformation, Player player) {
 
         return bowlingGameInformation
                 .stream()

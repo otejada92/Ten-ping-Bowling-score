@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class BowlingBoardPrinter implements BowlingBoardService {
 
     private static final Logger logger = LogManager.getLogger(BowlingBoardPrinter.class);
-    private final String LOG_FORMAT = "{} {} {} {}s {} {} {} {} {} {} \n";
+    private final String LOG_FORMAT = "{} {} {} {} {} {} {} {} {} {} \n";
 
     @Override
     public void viewBowlingBoardResult(Map<Player, List<Frame>> frameResult) {
@@ -27,33 +27,17 @@ public class BowlingBoardPrinter implements BowlingBoardService {
         for (Player player : frameResult.keySet()) {
             List<Frame> framesInfo = frameResult.get(player);
 
-            showFrameRoundLane(framesInfo);
-            showPlayerLaneInfo(player);
-            showPinFallsLane(framesInfo);
-            showScoreLane(framesInfo);
+            showPinFallsLane(player, framesInfo);
+            showScoreLane(player, framesInfo);
         }
     }
 
-    private void showFrameRoundLane(List<Frame> framesInfo) {
-
-        String frameRound = framesInfo.stream().map(Frame::getRound)
-                .map(Objects::toString)
-                .collect(Collectors.joining(" "));
-
-        logger.info("Frames: ");
-        logger.info(LOG_FORMAT, (Object[]) frameRound.split(" "));
-    }
-
-    private void showPlayerLaneInfo(Player player) {
-        logger.info(player.getName());
-    }
-
-    private void showPinFallsLane(List<Frame> framesInfo) {
+    private void showPinFallsLane(Player player, List<Frame> framesInfo) {
 
         String pinFallsLaneValue = framesInfo.stream().map(this::getPinFallInfo)
                 .map(Objects::toString).collect(Collectors.joining(" "));
 
-        logger.info("Pin falls: ");
+        logger.info(player.getName() + " - Pin falls: ");
         logger.info(LOG_FORMAT, (Object[]) pinFallsLaneValue.split(","));
     }
 
@@ -66,10 +50,10 @@ public class BowlingBoardPrinter implements BowlingBoardService {
 
     }
 
-    private void showScoreLane(List<Frame> framesInfo) {
+    private void showScoreLane(Player player, List<Frame> framesInfo) {
 
         String scores = framesInfo.stream().map(Frame::getFrameFinalScore).map(Objects::toString).collect(Collectors.joining(" "));
-        logger.info("Score: ");
+        logger.info(player.getName() + " - score: ");
         logger.info(LOG_FORMAT, (Object[]) scores.split(" "));
     }
 
