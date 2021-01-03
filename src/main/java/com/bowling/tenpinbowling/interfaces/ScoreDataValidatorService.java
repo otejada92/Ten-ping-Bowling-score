@@ -5,15 +5,16 @@ import com.bowling.tenpinbowling.models.Player;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public interface ScoreDataValidatorService {
 
     boolean validateScore(Map<Player, List<Frame>> score);
 
-    boolean expected();
+    boolean existAllFrames(List<Frame> frameScore);
 
-    boolean greater(List<String> scores);
+    Predicate<String> greaterThanTen();
 
-    boolean less(List<String> scores);
+    Predicate<String> lessThanZero();
 
 }

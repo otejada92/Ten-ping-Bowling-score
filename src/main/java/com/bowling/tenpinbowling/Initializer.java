@@ -53,20 +53,23 @@ public class Initializer implements ApplicationRunner {
 
             String filePath = args.getOptionValues("file").get(0);
             File file = new File(filePath);
+            if(file.exists()) {
+                Map<Player, List<String>> scores = scoreParseService.buildScoreMap(file);
+                for (Player player : scores.keySet()){
+                    List<String> playerScore = scores.get(player);
+                    List<Frame> frames = scoreFrameCreatorService.getScoreFrames(playerScore);
+                    playerFrames.put(player, frames);
+                }
 
-            Map<Player, List<String>> scores = scoreParseService.buildScoreMap(file);
-            for (Player player : scores.keySet()){
-                List<String> playerScore = scores.get(player);
-                List<Frame> frames = scoreFrameCreatorService.getScoreFrames(playerScore);
-                playerFrames.put(player, frames);
-            }
+                if (!scoreFrameValidatorService.validateScore(playerFrames)) {
+                    logger.error("Score information is not valid.");
+                } else {
 
-            if (!scoreFrameValidatorService.validateScore(playerFrames)) {
-                logger.error("Score information is not valid.");
-            } else {
-
-                Map<Player, List<Frame>> frameResult = scoreFrameProcessorService.calculateFrameScore(playerFrames);
-                bowlingBoardService.viewBowlingBoardResult(frameResult);
+                    Map<Player, List<Frame>> frameResult = scoreFrameProcessorService.calculateFrameScore(playerFrames);
+                    bowlingBoardService.viewBowlingBoardResult(frameResult);
+                }
+            } else  {
+                logger.error("File does not exist, {}", filePath);
             }
         }
     }

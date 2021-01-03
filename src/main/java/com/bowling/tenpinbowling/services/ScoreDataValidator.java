@@ -1,56 +1,113 @@
 package com.bowling.tenpinbowling.services;
 
+import com.bowling.tenpinbowling.enums.SystemConstant;
 import com.bowling.tenpinbowling.interfaces.ScoreDataValidatorService;
 import com.bowling.tenpinbowling.models.Frame;
 import com.bowling.tenpinbowling.models.Player;
+import com.bowling.tenpinbowling.models.Roll;
+import com.bowling.tenpinbowling.scoreprocessors.common.ScoreParseData;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-
-// If there is Less than the expected throws the system crash.
-// Allows consecutive values greater than 10(9,9)
+import java.util.function.Predicate;
 
 @Service
 public class ScoreDataValidator implements ScoreDataValidatorService {
+
+    private final ScoreParseData scoreParseData;
+
+    public ScoreDataValidator() {
+        scoreParseData = new ScoreParseData();
+    }
 
     @Override
     public boolean validateScore(Map<Player, List<Frame>> score) {
         boolean isValid = true;
 
-//        for (Player player : score.keySet()){
-//            List<String> scores = score.get(player);
-//            if (notEmptyLine(scores)) {
-//
-//            }
-//        }
+        for (Player player : score.keySet()){
+            List<Frame> frameScores = score.get(player);
 
+            if (existAllFrames(frameScores)) {
+                for(Frame frame : frameScores) {
+
+                    Roll firstRoll = frame.getFirstRoll();
+                    Roll secondRoll = frame.getSecondRoll();
+
+                    if(frame.getRound() == SystemConstant.LAST_ROUND_ID.getValue()) {
+                        Roll thirdRoll = frame.getThirdRoll();
+                        isValid = validateScore(firstRoll.getScore(), secondRoll.getScore(), thirdRoll.getScore());
+                    }
+                    else {
+                        isValid = validateScore(firstRoll.getScore(), secondRoll.getScore());
+                    }
+
+                    if (!isValid) {
+                        break;
+                    }
+                }
+
+                if (!isValid) {
+                    break;
+                }
+            }
+            else {
+                isValid = false;
+                break;
+            }
+        }
         return isValid;
     }
 
-    // Verify - Allow more than the expected throws
     @Override
-    public boolean expected() {
-
-        return false;
+    public boolean existAllFrames(List<Frame> frameScore) {
+        return frameScore.size() == 10;
     }
 
-    //Verify - Allows values greater than 10
     @Override
-    public boolean greater(List<String> scores) {
-        return false;
-//        return scores.stream().anyMatch(scores > 10);
+    public Predicate<String> greaterThanTen() {
+        return (String score) -> scoreParseData.parseRollScoreToInteger(score) > 10;
     }
 
-    //Verify - Allows values lower than 0
     @Override
-    public boolean less(List<String> scores) {
-        return false;
-//        return scores.stream().anyMatch(scores < 0);
+    public Predicate<String> lessThanZero() {
+        return (String score) -> scoreParseData.parseRollScoreToInteger(score) < 0;
     }
 
-    private boolean notEmptyLine(List<String> scores){
-        return scores.stream().anyMatch(String::isEmpty);
+    private int getScoreSum(String... scores) {
+
+        return Arrays.stream(scores)
+                .mapToInt(scoreParseData::parseRollScoreToInteger)
+                .sum();
+    }
+
+    private boolean validateScore(String firstRoll, String secondRoll) {
+
+        String invalidScorePattern = "([F f]|[0-9]+)";
+
+        if (!firstRoll.matches(invalidScorePattern) || !secondRoll.matches(invalidScorePattern)){
+            return false;
+        }
+        if(greaterThanTen().or(lessThanZero()).test(firstRoll)) {
+            return false;
+        }
+        else if (greaterThanTen().or(lessThanZero()).test(secondRoll)) {
+            return false;
+        }
+        else return getScoreSum(firstRoll, secondRoll) <= 10
+                    && getScoreSum(firstRoll, secondRoll) >= 0;
+    }
+
+    private boolean validateScore(String firstRoll, String secondRoll, String thirdRoll) {
+        if(greaterThanTen().or(lessThanZero()).test(firstRoll)) {
+            return false;
+        }
+        else if (greaterThanTen().or(lessThanZero()).test(secondRoll)) {
+            return  false;
+        }
+        else return getScoreSum(firstRoll, secondRoll, thirdRoll) <= 30
+                    && getScoreSum(firstRoll, secondRoll, secondRoll, thirdRoll) >= 0;
     }
 }
