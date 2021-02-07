@@ -4,10 +4,10 @@ import com.bowling.tenpinbowling.interfaces.ProcessorStrategy;
 
 public abstract class ScoreProcessor implements ProcessorStrategy {
 
-    private final ScoreParse scoreParse;
+    private final ScoreParseData scoreParse;
 
     public ScoreProcessor() {
-        scoreParse = new ScoreParse();
+        scoreParse = new ScoreParseData();
     }
 
     protected int parseRollScoreToInteger(String score) {

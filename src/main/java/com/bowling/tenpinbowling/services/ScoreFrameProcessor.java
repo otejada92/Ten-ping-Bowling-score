@@ -38,12 +38,12 @@ public class ScoreFrameProcessor implements ScoreFrameProcessorService {
     }
 
     @Override
-    public Map<Player, List<Frame>> calculateFrameScore(Map<Player, List<Frame>> scoreMap) {
+    public Map<Player, List<Frame>> calculateFrameScore(Map<Player, List<Frame>> scores) {
 
         Map<Player, List<Frame>> calculatedFrames = new HashMap<>();
 
-        for (Player player : scoreMap.keySet()) {
-            List<Frame> frames = scoreMap.get(player);
+        for (Player player : scores.keySet()) {
+            List<Frame> frames = scores.get(player);
             List<Frame> calculateFrameScore = calculateFrameScore(frames);
             calculatedFrames.put(player, calculateFrameScore);
         }
@@ -89,6 +89,4 @@ public class ScoreFrameProcessor implements ScoreFrameProcessorService {
 
         return scoredFrame;
     }
-
-
 }

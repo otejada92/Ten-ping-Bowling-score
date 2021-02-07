@@ -10,8 +10,8 @@
         </Console>
 
         <RollingFile name="appLog"
-                     fileName="${APP_LOG_ROOT}/SpringBoot2App/application.log"
-                     filePattern="${APP_LOG_ROOT}/SpringBoot2App/application-%d{yyyy-MM-dd}-%i.log">
+                     fileName="${APP_LOG_ROOT}/App/application.log"
+                     filePattern="${APP_LOG_ROOT}/App/application-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="${LOG_PATTERN}" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="19500KB" />
@@ -22,13 +22,14 @@
     </Appenders>
     <Loggers>
 
-        <Logger name="com.howtodoinjava.app" additivity="false">
+        <Root level="info">
+            <AppenderRef ref="Console" />
+        </Root>
+
+        <Logger name="Bowling" level="trace" >
             <AppenderRef ref="appLog" />
             <AppenderRef ref="Console" />
         </Logger>
 
-        <Root level="debug">
-            <AppenderRef ref="Console" />
-        </Root>
     </Loggers>
 </Configuration>

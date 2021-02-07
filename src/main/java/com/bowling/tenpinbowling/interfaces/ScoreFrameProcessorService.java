@@ -8,5 +8,5 @@ import java.util.Map;
 
 public interface ScoreFrameProcessorService {
 
-    Map<Player, List<Frame>> calculateFrameScore(Map<Player, List<Frame>> scoreMap);
+    Map<Player, List<Frame>> calculateFrameScore(Map<Player, List<Frame>> scores);
 }

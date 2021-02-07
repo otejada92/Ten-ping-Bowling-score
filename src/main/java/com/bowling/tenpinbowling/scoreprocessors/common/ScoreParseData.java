@@ -1,8 +1,9 @@
 package com.bowling.tenpinbowling.scoreprocessors.common;
 
-class ScoreParse {
 
-    int parseRollScoreToInteger(String score) {
+public class ScoreParseData {
+
+    public int parseRollScoreToInteger(String score) {
 
         return parseRollScore(getEscapedRollScore(score));
     }
